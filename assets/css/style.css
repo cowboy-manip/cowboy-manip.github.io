@@ -229,8 +229,8 @@ h1 {
 
 .eval-global-button {
   display: inline-flex;
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.7rem;
+  height: 2.7rem;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--line);
@@ -238,10 +238,11 @@ h1 {
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-size: 1rem;
+  font-size: 1.18rem;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
+  box-shadow: 0 8px 20px rgba(20, 25, 35, 0.08);
 }
 
 .eval-global-button:hover {
@@ -251,13 +252,13 @@ h1 {
 
 .eval-global-button:disabled {
   border-color: var(--line);
-  color: rgba(95, 99, 104, 0.45);
+  color: rgba(22, 22, 22, 0.68);
   cursor: default;
 }
 
 .eval-global-button:disabled:hover {
   border-color: var(--line);
-  color: rgba(95, 99, 104, 0.45);
+  color: rgba(22, 22, 22, 0.68);
 }
 
 .eval-grid {
