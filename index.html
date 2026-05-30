@@ -217,6 +217,16 @@
       font-weight: 850;
     }
 
+    .evals-subtitle {
+      max-width: 680px;
+      margin: 0.72rem auto 0;
+      color: var(--muted);
+      font-size: clamp(0.98rem, 1.25vw, 1.12rem);
+      font-weight: 600;
+      line-height: 1.55;
+      text-wrap: balance;
+    }
+
     .eval-toolbar {
       display: flex;
       align-items: center;
@@ -430,6 +440,7 @@
     <section class="evals" id="real-world-evaluations" aria-labelledby="real-world-evaluations-title">
       <div class="evals-header">
         <h2 id="real-world-evaluations-title">Real World Evaluations</h2>
+        <p class="evals-subtitle">We evaluate our dexterous whole-body grasping policy in 24 in-the-wild real-world scenarios across over 100 unique objects, achieving a 91% success rate.</p>
         <div class="eval-toolbar" aria-label="Global rollout controls">
           <button class="eval-global-button" type="button" data-rollout-step="-1" aria-label="Previous rollout for all scenes" disabled>&lt;</button>
           <button class="eval-global-button" type="button" data-rollout-step="1" aria-label="Next rollout for all scenes" disabled>&gt;</button>
