@@ -127,9 +127,27 @@
       color: var(--accent);
     }
 
+    .title-word {
+      margin-bottom: 0.03em;
+      font-size: 1.28em;
+      line-height: 1;
+    }
+
     .title-word,
     .title-line {
-      display: inline;
+      display: block;
+    }
+
+    .title-line {
+      font-weight: 650;
+    }
+
+    .title-line--system {
+      font-size: 0.89em;
+    }
+
+    .title-line--context {
+      font-size: 1.12em;
     }
 
     .submission {
@@ -319,6 +337,16 @@
         line-height: 1.18;
       }
 
+      .title-line {
+        display: inline;
+        font-size: 0.92em;
+        font-weight: 650;
+      }
+
+      .title-line--system::after {
+        content: " ";
+      }
+
       .submission {
         margin-top: 22px;
         font-size: 1rem;
@@ -383,14 +411,9 @@
   <main>
     <header class="hero">
       <h1>
-        <span class="title-word"><span class="title-accent">COWBOY</span>:</span>
-        <span class="title-line">A Scalable</span>
-        <span class="title-line">Sim-to-Real</span>
-        <span class="title-line">Framework</span>
-        <span class="title-line">for Learning</span>
-        <span class="title-line">Contextual</span>
-        <span class="title-line">Whole-Body</span>
-        <span class="title-line">Manipulation</span>
+        <span class="title-word"><span class="title-accent">COWBOY</span></span>
+        <span class="title-line title-line--system">A Scalable Sim-to-Real Framework for Learning</span>
+        <span class="title-line title-line--context"><span class="title-accent">Co</span>ntextual <span class="title-accent">W</span>hole-<span class="title-accent">Bo</span>d<span class="title-accent">y</span> Manipulation</span>
       </h1>
       <p class="submission">
         <span>Submission to CoRL 2026</span>
