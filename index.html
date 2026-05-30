@@ -1,2 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Anonymous CoRL 2026 submission webpage for COWBOY.">
+  <title>COWBOY | CoRL 2026 Submission</title>
+  <style>
+    :root {
+      --bg: #fbfbfa;
+      --surface: #ffffff;
+      --text: #161616;
+      --muted: #5f6368;
+      --line: #e4e6ea;
+      --accent: #d85f28;
+      --accent-deep: #a8421d;
+      --accent-soft: #fff1e8;
+      --max: 900px;
+    }
 
-hello
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Aptos, "Aptos Display", "Aptos Text", "Segoe UI", Arial, sans-serif;
+      line-height: 1.58;
+      background:
+        linear-gradient(180deg, rgba(216, 95, 40, 0.08), rgba(216, 95, 40, 0) 250px),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 251, 250, 0.9);
+      backdrop-filter: blur(14px);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .topbar a {
+      color: #3f4349;
+      padding: 5px 0;
+    }
+
+    .topbar a:hover {
+      color: var(--accent);
+    }
+
+    .hero {
+      width: min(1080px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 74px 0 42px;
+      text-align: center;
+    }
+
+    h1 {
+      max-width: 1040px;
+      margin: 0 auto;
+      font-size: 2.5rem;
+      line-height: 1.12;
+      letter-spacing: 0;
+      font-weight: 800;
+      overflow-wrap: break-word;
+      text-wrap: normal;
+    }
+
+    .title-accent {
+      color: var(--accent);
+    }
+
+    .title-word,
+    .title-line {
+      display: inline;
+    }
+
+    .submission {
+      margin: 28px auto 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .submission span {
+      display: block;
+    }
+
+    .abstract {
+      position: relative;
+      width: 100%;
+      margin: 22px auto 0;
+      padding: 2.5rem 18px 2.2rem;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .abstract h2 {
+      max-width: var(--max);
+      margin: 0 auto 0.35rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.2;
+      letter-spacing: 0.11em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .abstract p {
+      max-width: var(--max);
+      margin: 0.45rem auto 0;
+      color: var(--text);
+      font-size: clamp(1rem, 1.3vw, 1.12rem);
+      line-height: 1.72;
+    }
+
+    .abstract p + p {
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        justify-content: flex-start;
+        padding: 12px 18px;
+      }
+
+      .hero {
+        width: min(calc(100% - 28px), var(--max));
+        padding: 48px 0 30px;
+      }
+
+      h1 {
+        font-size: 2.05rem;
+        line-height: 1.18;
+      }
+
+      .submission {
+        margin-top: 22px;
+        font-size: 1rem;
+      }
+
+      .abstract {
+        margin-top: 14px;
+        padding: 2.2rem 18px 2rem;
+      }
+
+      .abstract p {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      h1 {
+        font-size: 1.48rem;
+      }
+
+      .abstract {
+        padding: 2rem 16px 1.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar" aria-label="Page navigation">
+    <a href="#abstract">Abstract</a>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <h1>
+        <span class="title-word"><span class="title-accent">COWBOY</span>:</span>
+        <span class="title-line">A Scalable</span>
+        <span class="title-line">Sim-to-Real</span>
+        <span class="title-line">Framework</span>
+        <span class="title-line">for Learning</span>
+        <span class="title-line">Contextual</span>
+        <span class="title-line">Whole-Body</span>
+        <span class="title-line">Manipulation</span>
+      </h1>
+      <p class="submission">
+        <span>Submission to CoRL 2026</span>
+        <span>Paper ID: 715</span>
+      </p>
+    </header>
+
+    <section class="abstract" id="abstract" aria-labelledby="abstract-title">
+      <h2 id="abstract-title">Abstract</h2>
+      <p>Mobile manipulators must adapt not only to objects, but also to the spatial context in which they appear: where to position the base, how to manipulate, and where to look while navigating surrounding scene geometry. To address this, we present COWBOY, a scalable sim-to-real framework for learning such contextual whole-body manipulation. On whole-body dexterous grasping, COWBOY transfers zero-shot to hundreds of objects and diverse in-the-wild scenes, spanning cluttered tabletops, shelves, drawers, and other unstructured settings.</p>
+      <p>Rather than learning scene adaptation directly with RL in simulation, a vectorized environment-aware whole-body controller (WBC) handles reaching in thousands of scenes by coordinating base-arm motion, collision avoidance, and active vision. Then, local RL experts are trained in local scenes for object interaction and can be reused across thousands of full-scene layouts. We distill these composed WBC--RL teachers into a single vision policy that controls the mobile base, arm, dexterous hand, and actuated camera from point-cloud observations. The resulting policy exhibits contextual whole-body behavior, automatically adapting base placement, camera viewpoint, arm trajectory, and grasp strategy to observed scene and object geometry.</p>
+    </section>
+  </main>
+</body>
+</html>
