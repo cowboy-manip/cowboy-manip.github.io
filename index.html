@@ -42,29 +42,67 @@
       text-decoration: none;
     }
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      flex-wrap: wrap;
+    .site-menu {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 30;
+    }
+
+    .site-menu__button {
+      display: inline-flex;
+      width: 2.65rem;
+      height: 2.65rem;
+      align-items: center;
       justify-content: center;
-      gap: 28px;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(251, 251, 250, 0.9);
+      flex-direction: column;
+      gap: 0.25rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(20, 25, 35, 0.08);
       backdrop-filter: blur(14px);
-      font-size: 0.95rem;
-      font-weight: 600;
     }
 
-    .topbar a {
+    .site-menu__button span {
+      display: block;
+      width: 1rem;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .site-menu__panel {
+      position: absolute;
+      top: calc(100% + 0.55rem);
+      left: 0;
+      display: grid;
+      min-width: 13rem;
+      padding: 0.4rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 16px 38px rgba(20, 25, 35, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .site-menu__panel[hidden] {
+      display: none;
+    }
+
+    .site-menu__panel a {
+      padding: 0.58rem 0.72rem;
+      border-radius: 6px;
       color: #3f4349;
-      padding: 5px 0;
+      font-size: 0.92rem;
+      font-weight: 750;
     }
 
-    .topbar a:hover {
-      color: var(--accent);
+    .site-menu__panel a:hover {
+      background: var(--accent-soft);
+      color: var(--accent-deep);
     }
 
     .hero {
@@ -161,6 +199,47 @@
       font-weight: 850;
     }
 
+    .eval-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.48rem;
+      margin-top: 0.85rem;
+    }
+
+    .eval-global-button {
+      display: inline-flex;
+      width: 2.35rem;
+      height: 2.35rem;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .eval-global-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .eval-global-button:disabled {
+      border-color: var(--line);
+      color: rgba(95, 99, 104, 0.45);
+      cursor: default;
+    }
+
+    .eval-global-button:disabled:hover {
+      border-color: var(--line);
+      color: rgba(95, 99, 104, 0.45);
+    }
+
     .eval-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -202,6 +281,10 @@
       opacity: 1;
     }
 
+    .eval-card.is-loaded .eval-placeholder {
+      opacity: 0;
+    }
+
     .eval-placeholder {
       position: absolute;
       inset: 0;
@@ -212,6 +295,7 @@
       font-weight: 850;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      transition: opacity 180ms ease;
     }
 
     .eval-caption {
@@ -225,11 +309,6 @@
     }
 
     @media (max-width: 720px) {
-      .topbar {
-        justify-content: flex-start;
-        padding: 12px 18px;
-      }
-
       .hero {
         width: min(calc(100% - 28px), var(--max));
         padding: 48px 0 30px;
@@ -256,6 +335,10 @@
 
       .eval-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .eval-toolbar {
+        justify-content: center;
       }
     }
 
@@ -285,9 +368,16 @@
   </style>
 </head>
 <body>
-  <nav class="topbar" aria-label="Page navigation">
-    <a href="#abstract">Abstract</a>
-    <a href="#real-world-evaluations">Real World Evaluations</a>
+  <nav class="site-menu" aria-label="Page navigation">
+    <button class="site-menu__button" type="button" aria-expanded="false" aria-controls="site-menu-panel" aria-label="Open navigation menu" data-menu-button>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+    <div class="site-menu__panel" id="site-menu-panel" data-menu-panel hidden>
+      <a href="#abstract">Abstract</a>
+      <a href="#real-world-evaluations">Real World Evaluations</a>
+    </div>
   </nav>
 
   <main>
@@ -317,6 +407,10 @@
     <section class="evals" id="real-world-evaluations" aria-labelledby="real-world-evaluations-title">
       <div class="evals-header">
         <h2 id="real-world-evaluations-title">Real World Evaluations</h2>
+        <div class="eval-toolbar" aria-label="Global rollout controls">
+          <button class="eval-global-button" type="button" data-rollout-step="-1" aria-label="Previous rollout for all scenes" disabled>&lt;</button>
+          <button class="eval-global-button" type="button" data-rollout-step="1" aria-label="Next rollout for all scenes" disabled>&gt;</button>
+        </div>
       </div>
 
       <div class="eval-grid">
@@ -493,14 +587,185 @@
   </main>
 
   <script>
-    document.querySelectorAll(".eval-card").forEach((card) => {
-      const video = card.querySelector("video");
-      if (!video) return;
+    const menuButton = document.querySelector("[data-menu-button]");
+    const menuPanel = document.querySelector("[data-menu-panel]");
 
-      const showVideo = () => card.classList.add("is-loaded");
-      video.addEventListener("loadeddata", showVideo, { once: true });
-      video.addEventListener("canplay", showVideo, { once: true });
-      video.load();
+    function setMenuOpen(isOpen) {
+      if (!menuButton || !menuPanel) {
+        return;
+      }
+
+      menuPanel.hidden = !isOpen;
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+    }
+
+    if (menuButton && menuPanel) {
+      menuButton.addEventListener("click", () => {
+        setMenuOpen(menuPanel.hidden);
+      });
+
+      menuPanel.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => setMenuOpen(false));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!menuPanel.hidden && !event.target.closest(".site-menu")) {
+          setMenuOpen(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          setMenuOpen(false);
+        }
+      });
+    }
+
+    const MAX_NUMBERED_ROLLOUTS = 8;
+
+    function makeRolloutNames() {
+      const names = ["rollout.mp4"];
+      for (let index = 1; index <= MAX_NUMBERED_ROLLOUTS; index += 1) {
+        names.push(`rollout_${index}.mp4`);
+      }
+      return names;
+    }
+
+    async function readRolloutManifest(basePath) {
+      if (window.location.protocol === "file:") {
+        return [];
+      }
+
+      try {
+        const response = await fetch(`${basePath}/rollouts.json`, { cache: "no-store" });
+        if (!response.ok) {
+          return [];
+        }
+
+        const data = await response.json();
+        const videos = Array.isArray(data) ? data : data.videos;
+        if (!Array.isArray(videos)) {
+          return [];
+        }
+
+        return videos
+          .filter((name) => typeof name === "string" && name && !name.includes("/") && !name.includes("\\"))
+          .map((name) => `${basePath}/${name}`);
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function videoExists(url) {
+      return new Promise((resolve) => {
+        const probe = document.createElement("video");
+        let settled = false;
+        const timeout = window.setTimeout(() => settle(false), 2200);
+
+        function settle(exists) {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          window.clearTimeout(timeout);
+          probe.removeAttribute("src");
+          probe.load();
+          resolve(exists);
+        }
+
+        probe.preload = "metadata";
+        probe.muted = true;
+        probe.playsInline = true;
+        probe.addEventListener("loadedmetadata", () => settle(true), { once: true });
+        probe.addEventListener("error", () => settle(false), { once: true });
+        probe.src = url;
+        probe.load();
+      });
+    }
+
+    async function findRollouts(basePath) {
+      const manifestRollouts = await readRolloutManifest(basePath);
+      if (manifestRollouts.length) {
+        return manifestRollouts;
+      }
+
+      const candidates = makeRolloutNames().map((name) => `${basePath}/${name}`);
+      const availability = await Promise.all(candidates.map((url) => videoExists(url)));
+      return candidates.filter((url, index) => availability[index]);
+    }
+
+    const rolloutButtons = Array.from(document.querySelectorAll("[data-rollout-step]"));
+    const sceneStates = [];
+    let globalRolloutIndex = 0;
+    let maxRollouts = 0;
+
+    function updateGlobalControls() {
+      const hasMultipleRollouts = maxRollouts > 1;
+      rolloutButtons.forEach((button) => {
+        button.disabled = !hasMultipleRollouts;
+      });
+
+    }
+
+    function playVideo(video) {
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+    }
+
+    function setSceneRollout(state, rolloutIndex) {
+      if (!state.rollouts.length) {
+        return;
+      }
+
+      const sceneIndex = ((rolloutIndex % state.rollouts.length) + state.rollouts.length) % state.rollouts.length;
+      state.card.classList.remove("is-loaded");
+      state.source.setAttribute("src", state.rollouts[sceneIndex]);
+      state.video.load();
+      playVideo(state.video);
+    }
+
+    function setGlobalRollout(nextIndex) {
+      if (!maxRollouts) {
+        return;
+      }
+
+      globalRolloutIndex = ((nextIndex % maxRollouts) + maxRollouts) % maxRollouts;
+      sceneStates.forEach((state) => setSceneRollout(state, globalRolloutIndex));
+      updateGlobalControls();
+    }
+
+    rolloutButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const step = Number(button.getAttribute("data-rollout-step")) || 0;
+        setGlobalRollout(globalRolloutIndex + step);
+      });
+    });
+
+    Promise.all(Array.from(document.querySelectorAll(".eval-card")).map(async (card) => {
+      const video = card.querySelector("video");
+      const source = card.querySelector("source");
+      if (!video || !source) {
+        return;
+      }
+
+      const basePath = source.getAttribute("src").replace(/\/[^/]+$/, "");
+      const rollouts = await findRollouts(basePath);
+      if (!rollouts.length) {
+        return;
+      }
+
+      card.classList.add("has-video");
+      video.addEventListener("loadeddata", () => card.classList.add("is-loaded"));
+      video.addEventListener("canplay", () => card.classList.add("is-loaded"));
+
+      sceneStates.push({ card, video, source, rollouts });
+      maxRollouts = Math.max(maxRollouts, rollouts.length);
+    })).then(() => {
+      setGlobalRollout(0);
+      updateGlobalControls();
     });
   </script>
 </body>
