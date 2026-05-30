@@ -1,409 +1,11 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Anonymous CoRL 2026 submission webpage for COWBOY.">
   <title>COWBOY | CoRL 2026 Submission</title>
-  <style>
-    :root {
-      --bg: #fbfbfa;
-      --surface: #ffffff;
-      --text: #161616;
-      --muted: #5f6368;
-      --line: #e4e6ea;
-      --accent: #d85f28;
-      --accent-deep: #a8421d;
-      --accent-soft: #fff1e8;
-      --max: 900px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family: Aptos, "Aptos Display", "Aptos Text", "Segoe UI", Arial, sans-serif;
-      line-height: 1.58;
-      background:
-        linear-gradient(180deg, rgba(216, 95, 40, 0.08), rgba(216, 95, 40, 0) 250px),
-        var(--bg);
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .site-menu {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 30;
-    }
-
-    .site-menu__button {
-      display: inline-flex;
-      width: 2.65rem;
-      height: 2.65rem;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 0.25rem;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--text);
-      cursor: pointer;
-      box-shadow: 0 10px 28px rgba(20, 25, 35, 0.08);
-      backdrop-filter: blur(14px);
-    }
-
-    .site-menu__button span {
-      display: block;
-      width: 1rem;
-      height: 2px;
-      border-radius: 999px;
-      background: currentColor;
-    }
-
-    .site-menu__panel {
-      position: absolute;
-      top: calc(100% + 0.55rem);
-      left: 0;
-      display: grid;
-      min-width: 13rem;
-      padding: 0.4rem;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.96);
-      box-shadow: 0 16px 38px rgba(20, 25, 35, 0.12);
-      backdrop-filter: blur(14px);
-    }
-
-    .site-menu__panel[hidden] {
-      display: none;
-    }
-
-    .site-menu__panel a {
-      padding: 0.58rem 0.72rem;
-      border-radius: 6px;
-      color: #3f4349;
-      font-size: 0.92rem;
-      font-weight: 750;
-    }
-
-    .site-menu__panel a:hover {
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-    }
-
-    .hero {
-      width: min(1080px, calc(100% - 36px));
-      margin: 0 auto;
-      padding: 74px 0 42px;
-      text-align: center;
-    }
-
-    h1 {
-      max-width: 1040px;
-      margin: 0 auto;
-      font-size: 2.5rem;
-      line-height: 1.12;
-      letter-spacing: 0;
-      font-weight: 800;
-      overflow-wrap: break-word;
-      text-wrap: normal;
-    }
-
-    .title-accent {
-      color: var(--accent);
-    }
-
-    .title-word {
-      margin-bottom: 0.03em;
-      font-size: 1.28em;
-      line-height: 1;
-    }
-
-    .title-word,
-    .title-line {
-      display: block;
-    }
-
-    .title-line {
-      font-weight: 650;
-    }
-
-    .title-line--system {
-      font-size: 0.89em;
-    }
-
-    .title-line--context {
-      font-size: 1.12em;
-    }
-
-    .submission {
-      margin: 28px auto 0;
-      color: var(--muted);
-      font-size: 1.08rem;
-      font-weight: 600;
-      line-height: 1.75;
-    }
-
-    .submission span {
-      display: block;
-    }
-
-    .abstract {
-      position: relative;
-      width: 100%;
-      margin: 22px auto 0;
-      padding: 2.5rem 18px 2.2rem;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background: var(--surface);
-      box-shadow: none;
-      overflow: hidden;
-    }
-
-    .abstract h2 {
-      max-width: var(--max);
-      margin: 0 auto 0.35rem;
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.2;
-      letter-spacing: 0.11em;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .abstract p {
-      max-width: var(--max);
-      margin: 0.45rem auto 0;
-      color: var(--text);
-      font-size: clamp(1rem, 1.3vw, 1.12rem);
-      line-height: 1.72;
-    }
-
-    .abstract p + p {
-      margin-top: 1rem;
-    }
-
-    .evals {
-      padding: 3.4rem 18px 4rem;
-      background: var(--bg);
-    }
-
-    .evals-header {
-      width: min(1180px, 100%);
-      margin: 0 auto 1.35rem;
-      text-align: center;
-    }
-
-    .evals-header h2 {
-      margin: 0;
-      color: var(--text);
-      font-size: clamp(1.75rem, 2.7vw, 2.35rem);
-      line-height: 1.12;
-      letter-spacing: 0;
-      font-weight: 850;
-    }
-
-    .evals-subtitle {
-      max-width: 680px;
-      margin: 0.72rem auto 0;
-      color: var(--muted);
-      font-size: clamp(0.98rem, 1.25vw, 1.12rem);
-      font-weight: 600;
-      line-height: 1.55;
-      text-wrap: balance;
-    }
-
-    .eval-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.48rem;
-      margin-top: 0.85rem;
-    }
-
-    .eval-global-button {
-      display: inline-flex;
-      width: 2.35rem;
-      height: 2.35rem;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface);
-      color: var(--text);
-      font: inherit;
-      font-size: 1rem;
-      font-weight: 900;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .eval-global-button:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .eval-global-button:disabled {
-      border-color: var(--line);
-      color: rgba(95, 99, 104, 0.45);
-      cursor: default;
-    }
-
-    .eval-global-button:disabled:hover {
-      border-color: var(--line);
-      color: rgba(95, 99, 104, 0.45);
-    }
-
-    .eval-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0.8rem;
-      width: min(1180px, 100%);
-      margin: 0 auto;
-    }
-
-    .eval-card {
-      min-width: 0;
-      margin: 0;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-    }
-
-    .eval-media {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      background:
-        linear-gradient(135deg, rgba(216, 95, 40, 0.12), rgba(216, 95, 40, 0) 48%),
-        #f3f4f1;
-    }
-
-    .eval-media video {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 180ms ease;
-    }
-
-    .eval-card.is-loaded video {
-      opacity: 1;
-    }
-
-    .eval-card.is-loaded .eval-placeholder {
-      opacity: 0;
-    }
-
-    .eval-placeholder {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 850;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: opacity 180ms ease;
-    }
-
-    .eval-caption {
-      margin: 0;
-      padding: 0.48rem 0.58rem 0.56rem;
-      color: var(--text);
-      font-size: 0.86rem;
-      font-weight: 800;
-      line-height: 1.2;
-      text-align: center;
-    }
-
-    @media (max-width: 720px) {
-      .hero {
-        width: min(calc(100% - 28px), var(--max));
-        padding: 48px 0 30px;
-      }
-
-      h1 {
-        font-size: 2.05rem;
-        line-height: 1.18;
-      }
-
-      .title-line {
-        display: inline;
-        font-size: 0.92em;
-        font-weight: 650;
-      }
-
-      .title-line--system::after {
-        content: " ";
-      }
-
-      .submission {
-        margin-top: 22px;
-        font-size: 1rem;
-      }
-
-      .abstract {
-        margin-top: 14px;
-        padding: 2.2rem 18px 2rem;
-      }
-
-      .abstract p {
-        font-size: 1rem;
-      }
-
-      .eval-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .eval-toolbar {
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 420px) {
-      h1 {
-        font-size: 1.48rem;
-      }
-
-      .abstract {
-        padding: 2rem 16px 1.85rem;
-      }
-
-      .evals {
-        padding-right: 14px;
-        padding-left: 14px;
-      }
-
-      .eval-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.65rem;
-      }
-
-      .eval-caption {
-        font-size: 0.78rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <nav class="site-menu" aria-label="Page navigation">
@@ -450,168 +52,168 @@
       <div class="eval-grid">
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_1/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_1/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 01</div>
           </div>
           <figcaption class="eval-caption">Scene 01</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_2/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_2/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 02</div>
           </div>
           <figcaption class="eval-caption">Scene 02</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_3/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_3/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 03</div>
           </div>
           <figcaption class="eval-caption">Scene 03</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_4/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_4/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 04</div>
           </div>
           <figcaption class="eval-caption">Scene 04</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_5/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_5/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 05</div>
           </div>
           <figcaption class="eval-caption">Scene 05</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_6/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_6/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 06</div>
           </div>
           <figcaption class="eval-caption">Scene 06</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_7/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_7/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 07</div>
           </div>
           <figcaption class="eval-caption">Scene 07</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_8/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_8/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 08</div>
           </div>
           <figcaption class="eval-caption">Scene 08</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_9/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_9/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 09</div>
           </div>
           <figcaption class="eval-caption">Scene 09</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_10/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_10/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 10</div>
           </div>
           <figcaption class="eval-caption">Scene 10</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_11/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_11/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 11</div>
           </div>
           <figcaption class="eval-caption">Scene 11</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_12/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_12/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 12</div>
           </div>
           <figcaption class="eval-caption">Scene 12</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_13/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_13/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 13</div>
           </div>
           <figcaption class="eval-caption">Scene 13</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_14/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_14/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 14</div>
           </div>
           <figcaption class="eval-caption">Scene 14</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_15/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_15/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 15</div>
           </div>
           <figcaption class="eval-caption">Scene 15</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_16/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_16/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 16</div>
           </div>
           <figcaption class="eval-caption">Scene 16</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_17/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_17/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 17</div>
           </div>
           <figcaption class="eval-caption">Scene 17</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_18/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_18/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 18</div>
           </div>
           <figcaption class="eval-caption">Scene 18</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_19/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_19/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 19</div>
           </div>
           <figcaption class="eval-caption">Scene 19</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_20/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_20/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 20</div>
           </div>
           <figcaption class="eval-caption">Scene 20</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_21/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_21/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 21</div>
           </div>
           <figcaption class="eval-caption">Scene 21</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_22/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_22/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 22</div>
           </div>
           <figcaption class="eval-caption">Scene 22</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_23/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_23/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 23</div>
           </div>
           <figcaption class="eval-caption">Scene 23</figcaption>
         </figure>
         <figure class="eval-card">
           <div class="eval-media">
-            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_24/rollout.mp4" type="video/mp4"></video>
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/videos/real_world_evals/scene_24/rollout.mp4" type="video/mp4"></video>
             <div class="eval-placeholder">Scene 24</div>
           </div>
           <figcaption class="eval-caption">Scene 24</figcaption>
@@ -620,187 +222,7 @@
     </section>
   </main>
 
-  <script>
-    const menuButton = document.querySelector("[data-menu-button]");
-    const menuPanel = document.querySelector("[data-menu-panel]");
-
-    function setMenuOpen(isOpen) {
-      if (!menuButton || !menuPanel) {
-        return;
-      }
-
-      menuPanel.hidden = !isOpen;
-      menuButton.setAttribute("aria-expanded", String(isOpen));
-      menuButton.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
-    }
-
-    if (menuButton && menuPanel) {
-      menuButton.addEventListener("click", () => {
-        setMenuOpen(menuPanel.hidden);
-      });
-
-      menuPanel.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => setMenuOpen(false));
-      });
-
-      document.addEventListener("click", (event) => {
-        if (!menuPanel.hidden && !event.target.closest(".site-menu")) {
-          setMenuOpen(false);
-        }
-      });
-
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          setMenuOpen(false);
-        }
-      });
-    }
-
-    const MAX_NUMBERED_ROLLOUTS = 8;
-
-    function makeRolloutNames() {
-      const names = ["rollout.mp4"];
-      for (let index = 1; index <= MAX_NUMBERED_ROLLOUTS; index += 1) {
-        names.push(`rollout_${index}.mp4`);
-      }
-      return names;
-    }
-
-    async function readRolloutManifest(basePath) {
-      if (window.location.protocol === "file:") {
-        return [];
-      }
-
-      try {
-        const response = await fetch(`${basePath}/rollouts.json`, { cache: "no-store" });
-        if (!response.ok) {
-          return [];
-        }
-
-        const data = await response.json();
-        const videos = Array.isArray(data) ? data : data.videos;
-        if (!Array.isArray(videos)) {
-          return [];
-        }
-
-        return videos
-          .filter((name) => typeof name === "string" && name && !name.includes("/") && !name.includes("\\"))
-          .map((name) => `${basePath}/${name}`);
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function videoExists(url) {
-      return new Promise((resolve) => {
-        const probe = document.createElement("video");
-        let settled = false;
-        const timeout = window.setTimeout(() => settle(false), 2200);
-
-        function settle(exists) {
-          if (settled) {
-            return;
-          }
-          settled = true;
-          window.clearTimeout(timeout);
-          probe.removeAttribute("src");
-          probe.load();
-          resolve(exists);
-        }
-
-        probe.preload = "metadata";
-        probe.muted = true;
-        probe.playsInline = true;
-        probe.addEventListener("loadedmetadata", () => settle(true), { once: true });
-        probe.addEventListener("error", () => settle(false), { once: true });
-        probe.src = url;
-        probe.load();
-      });
-    }
-
-    async function findRollouts(basePath) {
-      const manifestRollouts = await readRolloutManifest(basePath);
-      if (manifestRollouts.length) {
-        return manifestRollouts;
-      }
-
-      const candidates = makeRolloutNames().map((name) => `${basePath}/${name}`);
-      const availability = await Promise.all(candidates.map((url) => videoExists(url)));
-      return candidates.filter((url, index) => availability[index]);
-    }
-
-    const rolloutButtons = Array.from(document.querySelectorAll("[data-rollout-step]"));
-    const sceneStates = [];
-    let globalRolloutIndex = 0;
-    let maxRollouts = 0;
-
-    function updateGlobalControls() {
-      const hasMultipleRollouts = maxRollouts > 1;
-      rolloutButtons.forEach((button) => {
-        button.disabled = !hasMultipleRollouts;
-      });
-
-    }
-
-    function playVideo(video) {
-      const playPromise = video.play();
-      if (playPromise && typeof playPromise.catch === "function") {
-        playPromise.catch(() => {});
-      }
-    }
-
-    function setSceneRollout(state, rolloutIndex) {
-      if (!state.rollouts.length) {
-        return;
-      }
-
-      const sceneIndex = ((rolloutIndex % state.rollouts.length) + state.rollouts.length) % state.rollouts.length;
-      state.card.classList.remove("is-loaded");
-      state.source.setAttribute("src", state.rollouts[sceneIndex]);
-      state.video.load();
-      playVideo(state.video);
-    }
-
-    function setGlobalRollout(nextIndex) {
-      if (!maxRollouts) {
-        return;
-      }
-
-      globalRolloutIndex = ((nextIndex % maxRollouts) + maxRollouts) % maxRollouts;
-      sceneStates.forEach((state) => setSceneRollout(state, globalRolloutIndex));
-      updateGlobalControls();
-    }
-
-    rolloutButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const step = Number(button.getAttribute("data-rollout-step")) || 0;
-        setGlobalRollout(globalRolloutIndex + step);
-      });
-    });
-
-    Promise.all(Array.from(document.querySelectorAll(".eval-card")).map(async (card) => {
-      const video = card.querySelector("video");
-      const source = card.querySelector("source");
-      if (!video || !source) {
-        return;
-      }
-
-      const basePath = source.getAttribute("src").replace(/\/[^/]+$/, "");
-      const rollouts = await findRollouts(basePath);
-      if (!rollouts.length) {
-        return;
-      }
-
-      card.classList.add("has-video");
-      video.addEventListener("loadeddata", () => card.classList.add("is-loaded"));
-      video.addEventListener("canplay", () => card.classList.add("is-loaded"));
-
-      sceneStates.push({ card, video, source, rollouts });
-      maxRollouts = Math.max(maxRollouts, rollouts.length);
-    })).then(() => {
-      setGlobalRollout(0);
-      updateGlobalControls();
-    });
-  </script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
+
