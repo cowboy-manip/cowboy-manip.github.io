@@ -47,6 +47,7 @@
       top: 0;
       z-index: 10;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       gap: 28px;
       padding: 14px 18px;
@@ -140,6 +141,89 @@
       margin-top: 1rem;
     }
 
+    .evals {
+      padding: 3.4rem 18px 4rem;
+      background: var(--bg);
+    }
+
+    .evals-header {
+      width: min(1180px, 100%);
+      margin: 0 auto 1.35rem;
+      text-align: center;
+    }
+
+    .evals-header h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(1.75rem, 2.7vw, 2.35rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+      font-weight: 850;
+    }
+
+    .eval-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .eval-card {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .eval-media {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(216, 95, 40, 0.12), rgba(216, 95, 40, 0) 48%),
+        #f3f4f1;
+    }
+
+    .eval-media video {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .eval-card.is-loaded video {
+      opacity: 1;
+    }
+
+    .eval-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eval-caption {
+      margin: 0;
+      padding: 0.48rem 0.58rem 0.56rem;
+      color: var(--text);
+      font-size: 0.86rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-align: center;
+    }
+
     @media (max-width: 720px) {
       .topbar {
         justify-content: flex-start;
@@ -169,6 +253,10 @@
       .abstract p {
         font-size: 1rem;
       }
+
+      .eval-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 420px) {
@@ -179,12 +267,27 @@
       .abstract {
         padding: 2rem 16px 1.85rem;
       }
+
+      .evals {
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .eval-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+      }
+
+      .eval-caption {
+        font-size: 0.78rem;
+      }
     }
   </style>
 </head>
 <body>
   <nav class="topbar" aria-label="Page navigation">
     <a href="#abstract">Abstract</a>
+    <a href="#real-world-evaluations">Real World Evaluations</a>
   </nav>
 
   <main>
@@ -210,6 +313,195 @@
       <p>Mobile manipulators must adapt not only to objects, but also to the spatial context in which they appear: where to position the base, how to manipulate, and where to look while navigating surrounding scene geometry. To address this, we present COWBOY, a scalable sim-to-real framework for learning such contextual whole-body manipulation. On whole-body dexterous grasping, COWBOY transfers zero-shot to hundreds of objects and diverse in-the-wild scenes, spanning cluttered tabletops, shelves, drawers, and other unstructured settings.</p>
       <p>Rather than learning scene adaptation directly with RL in simulation, a vectorized environment-aware whole-body controller (WBC) handles reaching in thousands of scenes by coordinating base-arm motion, collision avoidance, and active vision. Then, local RL experts are trained in local scenes for object interaction and can be reused across thousands of full-scene layouts. We distill these composed WBC--RL teachers into a single vision policy that controls the mobile base, arm, dexterous hand, and actuated camera from point-cloud observations. The resulting policy exhibits contextual whole-body behavior, automatically adapting base placement, camera viewpoint, arm trajectory, and grasp strategy to observed scene and object geometry.</p>
     </section>
+
+    <section class="evals" id="real-world-evaluations" aria-labelledby="real-world-evaluations-title">
+      <div class="evals-header">
+        <h2 id="real-world-evaluations-title">Real World Evaluations</h2>
+      </div>
+
+      <div class="eval-grid">
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_1/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 01</div>
+          </div>
+          <figcaption class="eval-caption">Scene 01</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_2/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 02</div>
+          </div>
+          <figcaption class="eval-caption">Scene 02</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_3/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 03</div>
+          </div>
+          <figcaption class="eval-caption">Scene 03</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_4/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 04</div>
+          </div>
+          <figcaption class="eval-caption">Scene 04</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_5/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 05</div>
+          </div>
+          <figcaption class="eval-caption">Scene 05</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_6/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 06</div>
+          </div>
+          <figcaption class="eval-caption">Scene 06</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_7/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 07</div>
+          </div>
+          <figcaption class="eval-caption">Scene 07</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_8/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 08</div>
+          </div>
+          <figcaption class="eval-caption">Scene 08</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_9/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 09</div>
+          </div>
+          <figcaption class="eval-caption">Scene 09</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_10/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 10</div>
+          </div>
+          <figcaption class="eval-caption">Scene 10</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_11/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 11</div>
+          </div>
+          <figcaption class="eval-caption">Scene 11</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_12/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 12</div>
+          </div>
+          <figcaption class="eval-caption">Scene 12</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_13/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 13</div>
+          </div>
+          <figcaption class="eval-caption">Scene 13</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_14/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 14</div>
+          </div>
+          <figcaption class="eval-caption">Scene 14</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_15/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 15</div>
+          </div>
+          <figcaption class="eval-caption">Scene 15</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_16/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 16</div>
+          </div>
+          <figcaption class="eval-caption">Scene 16</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_17/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 17</div>
+          </div>
+          <figcaption class="eval-caption">Scene 17</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_18/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 18</div>
+          </div>
+          <figcaption class="eval-caption">Scene 18</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_19/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 19</div>
+          </div>
+          <figcaption class="eval-caption">Scene 19</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_20/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 20</div>
+          </div>
+          <figcaption class="eval-caption">Scene 20</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_21/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 21</div>
+          </div>
+          <figcaption class="eval-caption">Scene 21</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_22/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 22</div>
+          </div>
+          <figcaption class="eval-caption">Scene 22</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_23/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 23</div>
+          </div>
+          <figcaption class="eval-caption">Scene 23</figcaption>
+        </figure>
+        <figure class="eval-card">
+          <div class="eval-media">
+            <video muted autoplay loop playsinline preload="metadata"><source src="assets/real_world_evals/scene_24/rollout.mp4" type="video/mp4"></video>
+            <div class="eval-placeholder">Scene 24</div>
+          </div>
+          <figcaption class="eval-caption">Scene 24</figcaption>
+        </figure>
+      </div>
+    </section>
   </main>
+
+  <script>
+    document.querySelectorAll(".eval-card").forEach((card) => {
+      const video = card.querySelector("video");
+      if (!video) return;
+
+      const showVideo = () => card.classList.add("is-loaded");
+      video.addEventListener("loadeddata", showVideo, { once: true });
+      video.addEventListener("canplay", showVideo, { once: true });
+      video.load();
+    });
+  </script>
 </body>
 </html>
