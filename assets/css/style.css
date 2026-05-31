@@ -202,19 +202,21 @@ h1 {
 .sim-real__title {
   max-width: 100%;
   margin: 0;
-  color: var(--muted);
+  color: var(--text);
   font-size: clamp(1.65rem, 2.8vw, 2.55rem);
   line-height: 1.12;
   letter-spacing: 0;
-  font-weight: 850;
+  font-weight: 600;
 }
 
 .sim-real__title-muted {
-  color: #777b82;
+  color: var(--text);
+  font-weight: 560;
 }
 
 .sim-real__title-strong {
   color: var(--text);
+  font-weight: 680;
 }
 
 .sim-real__body {
