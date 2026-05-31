@@ -350,6 +350,43 @@ h1 {
   text-align: center;
 }
 
+.contextual {
+  padding: 3.6rem 18px 3.7rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.contextual__inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.contextual__title {
+  max-width: 100%;
+  margin: 0 auto;
+  color: var(--text);
+  font-size: clamp(1.65rem, 2.7vw, 2.45rem);
+  line-height: 1.14;
+  letter-spacing: 0;
+  font-weight: 650;
+  text-align: center;
+}
+
+.contextual__body {
+  max-width: 980px;
+  margin: 1.25rem auto 0;
+  color: var(--text);
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  font-weight: 650;
+  line-height: 1.62;
+  text-align: center;
+}
+
+.contextual__body p {
+  margin: 0;
+}
+
 .evals {
   padding: 3.4rem 18px 4rem;
   background: var(--bg);
