@@ -219,6 +219,14 @@ h1 {
   text-wrap: balance;
 }
 
+.text-accent {
+  color: var(--accent);
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
 .eval-play-hint {
   margin: 0.85rem auto 0;
   color: var(--accent);
