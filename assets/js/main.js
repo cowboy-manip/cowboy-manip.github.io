@@ -36,20 +36,15 @@ if (menuButton && menuPanel) {
 const REAL_WORLD_VIDEO_ROOT = "assets/videos/real_world_evals";
 const MAX_PLAYING_EVAL_VIDEOS = 6;
 const SUPPORTS_HOVER = window.matchMedia ? window.matchMedia("(hover: hover)").matches : true;
+const playHint = document.querySelector("[data-play-hint]");
 
-const videoButtons = Array.from(document.querySelectorAll("[data-video-step]"));
 const sceneStates = [];
 const playingStates = [];
-let globalVideoIndex = 0;
-let maxVideos = 0;
 let expandedVideo = null;
 let expandedSourceState = null;
 
-function updateGlobalControls() {
-  const hasMultipleVideos = maxVideos > 1;
-  videoButtons.forEach((button) => {
-    button.disabled = !hasMultipleVideos;
-  });
+if (playHint) {
+  playHint.textContent = SUPPORTS_HOVER ? "Hover to play video" : "Tap to play video";
 }
 
 function playVideo(video) {
@@ -57,6 +52,18 @@ function playVideo(video) {
   if (playPromise && typeof playPromise.catch === "function") {
     playPromise.catch(() => {});
   }
+}
+
+function keepVideoMuted(video) {
+  video.defaultMuted = true;
+  video.muted = true;
+  video.volume = 0;
+  video.addEventListener("volumechange", () => {
+    if (!video.muted || video.volume !== 0) {
+      video.muted = true;
+      video.volume = 0;
+    }
+  });
 }
 
 function makeIconSvg(kind) {
@@ -123,7 +130,7 @@ function getStateVideoUrl(state) {
     return "";
   }
 
-  const videoIndex = typeof state.videoIndex === "number" ? state.videoIndex : globalVideoIndex;
+  const videoIndex = typeof state.videoIndex === "number" ? state.videoIndex : 0;
   return state.videos[getLoopedIndex(videoIndex, state.videos.length)];
 }
 
@@ -250,31 +257,6 @@ function changeSceneObject(state) {
   }
 }
 
-function setGlobalVideo(nextIndex) {
-  if (!maxVideos) {
-    return;
-  }
-
-  globalVideoIndex = getLoopedIndex(nextIndex, maxVideos);
-  sceneStates.forEach((state) => {
-    setStateVideoIndex(state, globalVideoIndex);
-    if (state.isPlaying) {
-      prepareVideoSwitch(state);
-      playSelectedVideo(state);
-    } else {
-      setPoster(state);
-    }
-  });
-  updateGlobalControls();
-}
-
-videoButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const step = Number(button.getAttribute("data-video-step")) || 0;
-    setGlobalVideo(globalVideoIndex + step);
-  });
-});
-
 const visibilityObserver = "IntersectionObserver" in window
   ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -298,10 +280,16 @@ function createExpandedVideo() {
 
   const video = document.createElement("video");
   video.className = "eval-lightbox__video";
-  video.muted = true;
   video.loop = true;
+  video.controls = true;
   video.playsInline = true;
   video.preload = "none";
+  keepVideoMuted(video);
+
+  const changeButton = document.createElement("button");
+  changeButton.className = "eval-lightbox__change";
+  changeButton.type = "button";
+  changeButton.textContent = "Change Object";
 
   const closeButton = document.createElement("button");
   closeButton.className = "eval-lightbox__close";
@@ -309,6 +297,10 @@ function createExpandedVideo() {
   closeButton.setAttribute("aria-label", "Shrink video");
   closeButton.append(makeIconSvg("shrink"));
 
+  video.addEventListener("loadeddata", () => dialog.classList.remove("is-loading"));
+  video.addEventListener("canplay", () => dialog.classList.remove("is-loading"));
+  video.addEventListener("error", () => dialog.classList.remove("is-loading"));
+  changeButton.addEventListener("click", () => changeExpandedObject());
   closeButton.addEventListener("click", () => closeExpandedVideo());
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) {
@@ -316,16 +308,52 @@ function createExpandedVideo() {
     }
   });
 
-  frame.append(video, closeButton);
+  frame.append(video, changeButton, closeButton);
   dialog.append(frame);
   document.body.append(dialog);
 
-  expandedVideo = { dialog, video, closeButton };
+  expandedVideo = { dialog, video, changeButton, closeButton };
+}
+
+function updateExpandedChangeButton(state) {
+  if (!expandedVideo) {
+    return;
+  }
+
+  const hasMultipleVideos = state.videos.length > 1;
+  const caption = state.card.querySelector(".eval-caption")?.textContent?.trim() || "this scene";
+  expandedVideo.changeButton.hidden = !hasMultipleVideos;
+  expandedVideo.changeButton.disabled = !hasMultipleVideos;
+  expandedVideo.changeButton.setAttribute("aria-label", `Change Object for ${caption}`);
+}
+
+function loadExpandedStateVideo(state) {
+  const videoUrl = getStateVideoUrl(state);
+  if (!expandedVideo || !videoUrl) {
+    return;
+  }
+
+  const posterUrl = getStatePosterUrl(state);
+  expandedVideo.dialog.classList.add("is-loading");
+  expandedVideo.video.pause();
+  expandedVideo.video.removeAttribute("src");
+  expandedVideo.video.poster = posterUrl;
+  expandedVideo.video.src = videoUrl;
+  expandedVideo.video.load();
+  playVideo(expandedVideo.video);
+}
+
+function changeExpandedObject() {
+  if (!expandedSourceState || expandedSourceState.videos.length < 2) {
+    return;
+  }
+
+  setStateVideoIndex(expandedSourceState, expandedSourceState.videoIndex + 1);
+  loadExpandedStateVideo(expandedSourceState);
 }
 
 function openExpandedVideo(state) {
   const videoUrl = getStateVideoUrl(state);
-  const posterUrl = getStatePosterUrl(state);
   if (!videoUrl) {
     return;
   }
@@ -336,12 +364,10 @@ function openExpandedVideo(state) {
 
   expandedSourceState = state;
   stopStateVideo(state);
-  expandedVideo.video.poster = posterUrl;
-  expandedVideo.video.src = videoUrl;
-  expandedVideo.video.load();
+  updateExpandedChangeButton(state);
   expandedVideo.dialog.hidden = false;
   document.body.classList.add("has-eval-lightbox");
-  playVideo(expandedVideo.video);
+  loadExpandedStateVideo(state);
   expandedVideo.closeButton.focus({ preventScroll: true });
 }
 
@@ -399,8 +425,8 @@ function addChangeObjectButton(state) {
   const button = document.createElement("button");
   button.className = "eval-change-button";
   button.type = "button";
-  button.textContent = "Change object";
-  button.setAttribute("aria-label", `Change object for ${caption}`);
+  button.textContent = "Change Object";
+  button.setAttribute("aria-label", `Change Object for ${caption}`);
   button.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -427,6 +453,7 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
   card.tabIndex = 0;
 
   const state = { card, video, videos, currentUrl: "", isPlaying: false, videoIndex: 0 };
+  keepVideoMuted(video);
   setPoster(state);
   card._evalState = state;
   addExpandButton(state);
@@ -458,13 +485,10 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
   });
 
   sceneStates.push(state);
-  maxVideos = Math.max(maxVideos, videos.length);
   if (visibilityObserver) {
     visibilityObserver.observe(card);
   }
 });
-
-updateGlobalControls();
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
