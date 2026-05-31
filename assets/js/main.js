@@ -33,39 +33,24 @@ if (menuButton && menuPanel) {
   });
 }
 
-const MAX_NUMBERED_ROLLOUTS = 8;
+const MAX_SCENE_VIDEOS = 24;
 
-function makeRolloutNames() {
-  const names = ["rollout.mp4"];
-  for (let index = 1; index <= MAX_NUMBERED_ROLLOUTS; index += 1) {
-    names.push(`rollout_${index}.mp4`);
-  }
-  return names;
+function getSceneNumber(basePath) {
+  const match = basePath.match(/(?:^|\/)scene_(\d+)$/);
+  return match ? Number(match[1]) : null;
 }
 
-async function readRolloutManifest(basePath) {
-  if (window.location.protocol === "file:") {
+function makeSceneVideoNames(basePath) {
+  const sceneNumber = getSceneNumber(basePath);
+  if (!sceneNumber) {
     return [];
   }
 
-  try {
-    const response = await fetch(`${basePath}/rollouts.json`, { cache: "no-store" });
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-    const videos = Array.isArray(data) ? data : data.videos;
-    if (!Array.isArray(videos)) {
-      return [];
-    }
-
-    return videos
-      .filter((name) => typeof name === "string" && name && !name.includes("/") && !name.includes("\\"))
-      .map((name) => `${basePath}/${name}`);
-  } catch (error) {
-    return [];
+  const names = [];
+  for (let index = 1; index <= MAX_SCENE_VIDEOS; index += 1) {
+    names.push(`${basePath}/scene_${sceneNumber}_${index}.mp4`);
   }
+  return names;
 }
 
 function videoExists(url) {
@@ -95,28 +80,22 @@ function videoExists(url) {
   });
 }
 
-async function findRollouts(basePath) {
-  const manifestRollouts = await readRolloutManifest(basePath);
-  if (manifestRollouts.length) {
-    return manifestRollouts;
-  }
-
-  const candidates = makeRolloutNames().map((name) => `${basePath}/${name}`);
+async function findSceneVideos(basePath) {
+  const candidates = makeSceneVideoNames(basePath);
   const availability = await Promise.all(candidates.map((url) => videoExists(url)));
   return candidates.filter((url, index) => availability[index]);
 }
 
-const rolloutButtons = Array.from(document.querySelectorAll("[data-rollout-step]"));
+const videoButtons = Array.from(document.querySelectorAll("[data-video-step]"));
 const sceneStates = [];
-let globalRolloutIndex = 0;
-let maxRollouts = 0;
+let globalVideoIndex = 0;
+let maxVideos = 0;
 
 function updateGlobalControls() {
-  const hasMultipleRollouts = maxRollouts > 1;
-  rolloutButtons.forEach((button) => {
-    button.disabled = !hasMultipleRollouts;
+  const hasMultipleVideos = maxVideos > 1;
+  videoButtons.forEach((button) => {
+    button.disabled = !hasMultipleVideos;
   });
-
 }
 
 function playVideo(video) {
@@ -126,32 +105,32 @@ function playVideo(video) {
   }
 }
 
-function setSceneRollout(state, rolloutIndex) {
-  if (!state.rollouts.length) {
+function setSceneVideo(state, videoIndex) {
+  if (!state.videos.length) {
     return;
   }
 
-  const sceneIndex = ((rolloutIndex % state.rollouts.length) + state.rollouts.length) % state.rollouts.length;
+  const sceneIndex = ((videoIndex % state.videos.length) + state.videos.length) % state.videos.length;
   state.card.classList.remove("is-loaded");
-  state.source.setAttribute("src", state.rollouts[sceneIndex]);
+  state.source.setAttribute("src", state.videos[sceneIndex]);
   state.video.load();
   playVideo(state.video);
 }
 
-function setGlobalRollout(nextIndex) {
-  if (!maxRollouts) {
+function setGlobalVideo(nextIndex) {
+  if (!maxVideos) {
     return;
   }
 
-  globalRolloutIndex = ((nextIndex % maxRollouts) + maxRollouts) % maxRollouts;
-  sceneStates.forEach((state) => setSceneRollout(state, globalRolloutIndex));
+  globalVideoIndex = ((nextIndex % maxVideos) + maxVideos) % maxVideos;
+  sceneStates.forEach((state) => setSceneVideo(state, globalVideoIndex));
   updateGlobalControls();
 }
 
-rolloutButtons.forEach((button) => {
+videoButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const step = Number(button.getAttribute("data-rollout-step")) || 0;
-    setGlobalRollout(globalRolloutIndex + step);
+    const step = Number(button.getAttribute("data-video-step")) || 0;
+    setGlobalVideo(globalVideoIndex + step);
   });
 });
 
@@ -163,8 +142,8 @@ Promise.all(Array.from(document.querySelectorAll(".eval-card")).map(async (card)
   }
 
   const basePath = source.getAttribute("src").replace(/\/[^/]+$/, "");
-  const rollouts = await findRollouts(basePath);
-  if (!rollouts.length) {
+  const videos = await findSceneVideos(basePath);
+  if (!videos.length) {
     return;
   }
 
@@ -172,9 +151,9 @@ Promise.all(Array.from(document.querySelectorAll(".eval-card")).map(async (card)
   video.addEventListener("loadeddata", () => card.classList.add("is-loaded"));
   video.addEventListener("canplay", () => card.classList.add("is-loaded"));
 
-  sceneStates.push({ card, video, source, rollouts });
-  maxRollouts = Math.max(maxRollouts, rollouts.length);
+  sceneStates.push({ card, video, source, videos });
+  maxVideos = Math.max(maxVideos, videos.length);
 })).then(() => {
-  setGlobalRollout(0);
+  setGlobalVideo(0);
   updateGlobalControls();
 });

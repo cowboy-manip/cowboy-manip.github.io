@@ -1,24 +1,13 @@
 # Real World Evaluation Videos
 
 Each scene folder powers one tile in the Real World Evaluations grid.
-The page uses one global Previous/Next control for all scenes. Pressing it advances every scene to the same rollout index; scenes with fewer videos wrap around.
+The page uses one global Previous/Next control for all scenes. Pressing it advances every scene to the same video index; scenes with fewer videos wrap around.
 
-Default naming convention:
+Required naming convention:
 
-- `rollout.mp4`
-- `rollout_1.mp4`
-- `rollout_2.mp4`
+- `scene_1/scene_1_1.mp4`
+- `scene_1/scene_1_2.mp4`
+- `scene_2/scene_2_1.mp4`
 - ...
-- `rollout_8.mp4`
 
-For arbitrary filenames or more than eight rollouts, add a `rollouts.json` file inside the scene folder:
-
-```json
-{
-  "videos": [
-    "rollout_kitchen.mp4",
-    "rollout_shelf.mp4",
-    "rollout_drawer.mp4"
-  ]
-}
-```
+In general, save videos as `scene_<scene-number>_<video-number>.mp4` inside the matching `scene_<scene-number>/` folder.
