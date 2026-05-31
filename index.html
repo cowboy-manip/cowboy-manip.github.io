@@ -17,6 +17,7 @@
     </button>
     <div class="site-menu__panel" id="site-menu-panel" data-menu-panel hidden>
       <a href="#abstract">Abstract</a>
+      <a href="#sim-to-real">Sim-to-Real</a>
       <a href="#real-world-evaluations">Real World Evaluations</a>
     </div>
   </nav>
@@ -38,6 +39,38 @@
       <h2 id="abstract-title">Abstract</h2>
       <p>Mobile manipulators must adapt not only to objects, but also to the spatial context in which they appear: where to position the base, how to manipulate, and where to look while navigating surrounding scene geometry. To address this, we present COWBOY, a scalable sim-to-real framework for learning such contextual whole-body manipulation. On whole-body dexterous grasping, COWBOY transfers zero-shot to hundreds of objects and diverse in-the-wild scenes, spanning cluttered tabletops, shelves, drawers, and other unstructured settings.</p>
       <p>Rather than learning scene adaptation directly with RL in simulation, a vectorized environment-aware whole-body controller (WBC) handles reaching in thousands of scenes by coordinating base-arm motion, collision avoidance, and active vision. Then, local RL experts are trained in local scenes for object interaction and can be reused across thousands of full-scene layouts. We distill these composed WBC--RL teachers into a single vision policy that controls the mobile base, arm, dexterous hand, and actuated camera from point-cloud observations. The resulting policy exhibits contextual whole-body behavior, automatically adapting base placement, camera viewpoint, arm trajectory, and grasp strategy to observed scene and object geometry.</p>
+    </section>
+
+    <section class="sim-real" id="sim-to-real" aria-labelledby="sim-real-title">
+      <div class="sim-real__inner">
+        <h2 class="sim-real__title" id="sim-real-title">
+          <span class="title-accent">COWBOY</span>
+          <span class="sim-real__title-muted">enables sim-to-real mobile manipulation across</span>
+          <span class="sim-real__title-strong">diverse objects and environments.</span>
+        </h2>
+
+        <div class="sim-real__body">
+          <div class="sim-real__copy">
+            <p class="sim-real__lead">A single vision-based policy coordinates all <span class="text-accent">32 degrees of freedom</span>:</p>
+            <ul class="dof-list">
+              <li><span>Mobile base:</span><strong>3 DOF</strong></li>
+              <li><span>Arm:</span><strong>7 DOF</strong></li>
+              <li><span>Dexterous hand:</span><strong>16 DOF</strong></li>
+              <li><span>Actuated neck for active vision:</span><strong>6 DOF</strong></li>
+            </ul>
+            <p class="sim-real__summary">The policy enables the robot to grasp hundreds of objects across diverse in-the-wild scenes.</p>
+          </div>
+
+          <div class="showcase-carousel" aria-label="Real-world video carousel">
+            <div class="showcase-grid" data-showcase-grid></div>
+            <div class="showcase-controls">
+              <button class="showcase-button" type="button" data-showcase-step="-1" aria-label="Previous four videos"><span aria-hidden="true">&lt;</span></button>
+              <span class="showcase-status" data-showcase-status></span>
+              <button class="showcase-button" type="button" data-showcase-step="1" aria-label="Next four videos"><span aria-hidden="true">&gt;</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="evals" id="real-world-evaluations" aria-labelledby="real-world-evaluations-title">

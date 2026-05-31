@@ -35,13 +35,18 @@ if (menuButton && menuPanel) {
 
 const REAL_WORLD_VIDEO_ROOT = "assets/videos/real_world_evals";
 const MAX_PLAYING_EVAL_VIDEOS = 6;
+const SHOWCASE_PAGE_SIZE = 4;
 const SUPPORTS_HOVER = window.matchMedia ? window.matchMedia("(hover: hover)").matches : true;
 const playHint = document.querySelector("[data-play-hint]");
 
 const sceneStates = [];
 const playingStates = [];
+const showcaseGrid = document.querySelector("[data-showcase-grid]");
+const showcaseButtons = Array.from(document.querySelectorAll("[data-showcase-step]"));
+const showcaseStatus = document.querySelector("[data-showcase-status]");
 let expandedVideo = null;
 let expandedSourceState = null;
+let showcasePage = 0;
 
 if (playHint) {
   playHint.textContent = SUPPORTS_HOVER ? "Hover to play video" : "Tap to play video";
@@ -108,6 +113,14 @@ function getLoopedIndex(index, length) {
   return ((index % length) + length) % length;
 }
 
+function resolveVideoPath(path) {
+  if (path.startsWith("assets/") || path.startsWith("http")) {
+    return path;
+  }
+
+  return `${REAL_WORLD_VIDEO_ROOT}/${path}`;
+}
+
 function getSceneVideos(sceneNumber) {
   const manifest = window.REAL_WORLD_EVAL_VIDEOS || {};
   const videoNames = manifest[String(sceneNumber)];
@@ -118,10 +131,10 @@ function getSceneVideos(sceneNumber) {
 
   return videoNames.map((name) => {
     if (name.includes("/")) {
-      return name;
+      return resolveVideoPath(name);
     }
 
-    return `${REAL_WORLD_VIDEO_ROOT}/scene_${sceneNumber}/${name}`;
+    return resolveVideoPath(`scene_${sceneNumber}/${name}`);
   });
 }
 
@@ -153,6 +166,11 @@ function setPoster(state) {
   } else {
     state.video.removeAttribute("poster");
   }
+}
+
+function getShowcaseVideos() {
+  const order = window.REAL_WORLD_EVAL_SHOWCASE_ORDER || [];
+  return order.map(resolveVideoPath);
 }
 
 function setStateVideoIndex(state, nextIndex) {
@@ -256,6 +274,89 @@ function changeSceneObject(state) {
     setPoster(state);
   }
 }
+
+function unloadShowcaseVideos() {
+  if (!showcaseGrid) {
+    return;
+  }
+
+  showcaseGrid.querySelectorAll("video").forEach((video) => {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+  });
+}
+
+function updateShowcaseControls(totalPages) {
+  showcaseButtons.forEach((button) => {
+    button.disabled = totalPages <= 1;
+  });
+
+  if (showcaseStatus) {
+    showcaseStatus.textContent = totalPages ? `${showcasePage + 1} / ${totalPages}` : "";
+  }
+}
+
+function renderShowcasePage() {
+  if (!showcaseGrid) {
+    return;
+  }
+
+  const videos = getShowcaseVideos();
+  const totalPages = Math.ceil(videos.length / SHOWCASE_PAGE_SIZE);
+  unloadShowcaseVideos();
+  showcaseGrid.textContent = "";
+
+  if (!videos.length) {
+    updateShowcaseControls(0);
+    return;
+  }
+
+  showcasePage = getLoopedIndex(showcasePage, totalPages);
+  const pageVideos = videos.slice(
+    showcasePage * SHOWCASE_PAGE_SIZE,
+    showcasePage * SHOWCASE_PAGE_SIZE + SHOWCASE_PAGE_SIZE
+  );
+
+  pageVideos.forEach((videoUrl) => {
+    const card = document.createElement("figure");
+    card.className = "showcase-card";
+
+    const media = document.createElement("div");
+    media.className = "showcase-media";
+
+    const video = document.createElement("video");
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = "none";
+    video.poster = getPosterUrl(videoUrl);
+    video.src = videoUrl;
+    keepVideoMuted(video);
+
+    media.append(video);
+    card.append(media);
+    showcaseGrid.append(card);
+
+    video.load();
+    playVideo(video);
+  });
+
+  updateShowcaseControls(totalPages);
+}
+
+showcaseButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const step = Number(button.getAttribute("data-showcase-step")) || 0;
+    const totalPages = Math.ceil(getShowcaseVideos().length / SHOWCASE_PAGE_SIZE);
+    if (totalPages <= 1) {
+      return;
+    }
+
+    showcasePage = getLoopedIndex(showcasePage + step, totalPages);
+    renderShowcasePage();
+  });
+});
 
 const visibilityObserver = "IntersectionObserver" in window
   ? new IntersectionObserver((entries) => {
@@ -477,11 +578,7 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
       return;
     }
 
-    if (state.isPlaying) {
-      stopStateVideo(state);
-    } else {
-      playSelectedVideo(state);
-    }
+    openExpandedVideo(state);
   });
 
   sceneStates.push(state);
@@ -503,5 +600,8 @@ window.addEventListener("keydown", (event) => {
 });
 window.addEventListener("pagehide", () => {
   closeExpandedVideo();
+  unloadShowcaseVideos();
   sceneStates.forEach(stopStateVideo);
 });
+
+renderShowcasePage();
