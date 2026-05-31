@@ -42,6 +42,8 @@ const sceneStates = [];
 const playingStates = [];
 let globalVideoIndex = 0;
 let maxVideos = 0;
+let expandedVideo = null;
+let expandedSourceState = null;
 
 function updateGlobalControls() {
   const hasMultipleVideos = maxVideos > 1;
@@ -55,6 +57,44 @@ function playVideo(video) {
   if (playPromise && typeof playPromise.catch === "function") {
     playPromise.catch(() => {});
   }
+}
+
+function makeIconSvg(kind) {
+  const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  icon.setAttribute("viewBox", "0 0 24 24");
+  icon.setAttribute("aria-hidden", "true");
+  icon.setAttribute("focusable", "false");
+
+  const paths = {
+    expand: [
+      "M8 3H3v5",
+      "M3 3l6 6",
+      "M16 3h5v5",
+      "M21 3l-6 6",
+      "M8 21H3v-5",
+      "M3 21l6-6",
+      "M16 21h5v-5",
+      "M21 21l-6-6"
+    ],
+    shrink: [
+      "M9 3v6H3",
+      "M9 9 3 3",
+      "M15 3v6h6",
+      "M15 9l6-6",
+      "M9 21v-6H3",
+      "M9 15l-6 6",
+      "M15 21v-6h6",
+      "M15 15l6 6"
+    ]
+  };
+
+  paths[kind].forEach((d) => {
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", d);
+    icon.append(path);
+  });
+
+  return icon;
 }
 
 function getLoopedIndex(index, length) {
@@ -245,6 +285,106 @@ const visibilityObserver = "IntersectionObserver" in window
   }, { threshold: 0 })
   : null;
 
+function createExpandedVideo() {
+  const dialog = document.createElement("div");
+  dialog.className = "eval-lightbox";
+  dialog.hidden = true;
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.setAttribute("aria-label", "Expanded evaluation video");
+
+  const frame = document.createElement("div");
+  frame.className = "eval-lightbox__frame";
+
+  const video = document.createElement("video");
+  video.className = "eval-lightbox__video";
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = "none";
+
+  const closeButton = document.createElement("button");
+  closeButton.className = "eval-lightbox__close";
+  closeButton.type = "button";
+  closeButton.setAttribute("aria-label", "Shrink video");
+  closeButton.append(makeIconSvg("shrink"));
+
+  closeButton.addEventListener("click", () => closeExpandedVideo());
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) {
+      closeExpandedVideo();
+    }
+  });
+
+  frame.append(video, closeButton);
+  dialog.append(frame);
+  document.body.append(dialog);
+
+  expandedVideo = { dialog, video, closeButton };
+}
+
+function openExpandedVideo(state) {
+  const videoUrl = getStateVideoUrl(state);
+  const posterUrl = getStatePosterUrl(state);
+  if (!videoUrl) {
+    return;
+  }
+
+  if (!expandedVideo) {
+    createExpandedVideo();
+  }
+
+  expandedSourceState = state;
+  stopStateVideo(state);
+  expandedVideo.video.poster = posterUrl;
+  expandedVideo.video.src = videoUrl;
+  expandedVideo.video.load();
+  expandedVideo.dialog.hidden = false;
+  document.body.classList.add("has-eval-lightbox");
+  playVideo(expandedVideo.video);
+  expandedVideo.closeButton.focus({ preventScroll: true });
+}
+
+function closeExpandedVideo() {
+  if (!expandedVideo || expandedVideo.dialog.hidden) {
+    return;
+  }
+
+  expandedVideo.video.pause();
+  expandedVideo.video.removeAttribute("src");
+  expandedVideo.video.load();
+  expandedVideo.dialog.hidden = true;
+  document.body.classList.remove("has-eval-lightbox");
+
+  if (expandedSourceState) {
+    setPoster(expandedSourceState);
+    expandedSourceState.card.focus({ preventScroll: true });
+  }
+
+  expandedSourceState = null;
+}
+
+function addExpandButton(state) {
+  const media = state.card.querySelector(".eval-media");
+  if (!media) {
+    return;
+  }
+
+  const caption = state.card.querySelector(".eval-caption")?.textContent?.trim() || "this scene";
+  const button = document.createElement("button");
+  button.className = "eval-expand-button";
+  button.type = "button";
+  button.setAttribute("aria-label", `Expand video for ${caption}`);
+  button.append(makeIconSvg("expand"));
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openExpandedVideo(state);
+  });
+
+  media.append(button);
+}
+
 function addChangeObjectButton(state) {
   if (state.videos.length < 2) {
     return;
@@ -289,6 +429,7 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
   const state = { card, video, videos, currentUrl: "", isPlaying: false, videoIndex: 0 };
   setPoster(state);
   card._evalState = state;
+  addExpandButton(state);
   addChangeObjectButton(state);
   video.addEventListener("loadeddata", () => finishVideoLoad(state));
   video.addEventListener("canplay", () => finishVideoLoad(state));
@@ -327,7 +468,16 @@ updateGlobalControls();
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
+    closeExpandedVideo();
     sceneStates.forEach(stopStateVideo);
   }
 });
-window.addEventListener("pagehide", () => sceneStates.forEach(stopStateVideo));
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeExpandedVideo();
+  }
+});
+window.addEventListener("pagehide", () => {
+  closeExpandedVideo();
+  sceneStates.forEach(stopStateVideo);
+});
