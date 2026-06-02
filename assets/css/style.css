@@ -292,6 +292,40 @@ h1 {
   font-weight: 560;
 }
 
+.sim-real__eval-link {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  margin: 1.45rem auto 0;
+  padding: 0.86rem 1.18rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.96rem;
+  font-weight: 780;
+  line-height: 1;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(216, 95, 40, 0.1);
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.sim-real__eval-link:hover,
+.sim-real__eval-link:focus-visible {
+  border-color: var(--accent-deep);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  box-shadow: 0 10px 20px rgba(216, 95, 40, 0.14);
+  outline: none;
+  transform: translateY(-1px);
+}
+
 .showcase-carousel {
   min-width: 0;
 }
