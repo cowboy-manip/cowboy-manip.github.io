@@ -155,6 +155,41 @@ function getPosterUrl(videoUrl) {
   return `${directory}posters/${filename.replace(/\.mp4$/i, ".webp")}`;
 }
 
+function getShowcaseSceneId(videoPath) {
+  const match = videoPath.match(/(?:^|\/)scene_(\d+)(?:\/|_)/);
+  return match ? match[1] : videoPath;
+}
+
+function limitShowcaseVideosByScene(items) {
+  const sceneCounts = new Map();
+
+  return items.filter((item) => {
+    const count = sceneCounts.get(item.sceneId) || 0;
+    if (count >= 2) {
+      return false;
+    }
+
+    item.sceneSlot = count;
+    sceneCounts.set(item.sceneId, count + 1);
+    return true;
+  });
+}
+
+function arrangeShowcaseVideos(items) {
+  const slots = [];
+
+  items.forEach((item) => {
+    const slot = item.sceneSlot || 0;
+    if (!slots[slot]) {
+      slots[slot] = [];
+    }
+
+    slots[slot].push(item);
+  });
+
+  return slots.flat();
+}
+
 function getStatePosterUrl(state) {
   const videoUrl = getStateVideoUrl(state);
   return videoUrl ? getPosterUrl(videoUrl) : "";
@@ -171,7 +206,12 @@ function setPoster(state) {
 
 function getShowcaseVideos() {
   const order = window.REAL_WORLD_EVAL_SHOWCASE_ORDER || [];
-  return order.map(resolveVideoPath);
+  const items = order.map((videoPath) => ({
+    sceneId: getShowcaseSceneId(videoPath),
+    url: resolveVideoPath(videoPath)
+  }));
+
+  return arrangeShowcaseVideos(limitShowcaseVideosByScene(items)).map((item) => item.url);
 }
 
 function setStateVideoIndex(state, nextIndex) {
