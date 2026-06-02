@@ -189,8 +189,25 @@ h1 {
   margin-top: 1rem;
 }
 
+.policy-note {
+  padding: 4.4rem 18px 1.2rem;
+  background: var(--bg);
+}
+
+.policy-note__text {
+  max-width: 1180px;
+  margin: 0 auto;
+  color: var(--text);
+  font-size: clamp(1.35rem, 2.25vw, 2.05rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .sim-real {
-  padding: 3.8rem 18px 4rem;
+  padding: 2.9rem 18px 4rem;
   background: var(--bg);
 }
 
@@ -352,7 +369,7 @@ h1 {
 }
 
 .contextual {
-  padding: 3.8rem 18px 4rem;
+  padding: 1.45rem 18px 4rem;
   background: var(--bg);
 }
 
@@ -904,8 +921,17 @@ h1 {
     font-size: 1rem;
   }
 
+  .policy-note {
+    padding: 3.3rem 18px 1rem;
+  }
+
+  .policy-note__text {
+    font-size: clamp(1.35rem, 6vw, 1.9rem);
+    white-space: normal;
+  }
+
   .sim-real {
-    padding: 3rem 18px 3.2rem;
+    padding: 2.35rem 18px 3.2rem;
   }
 
   .sim-real__title {
@@ -917,7 +943,7 @@ h1 {
   }
 
   .contextual {
-    padding: 3rem 18px 3.2rem;
+    padding: 1.45rem 18px 3.2rem;
   }
 
   .contextual__title {
@@ -953,6 +979,11 @@ h1 {
   }
 
   .sim-real {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .policy-note {
     padding-right: 14px;
     padding-left: 14px;
   }
