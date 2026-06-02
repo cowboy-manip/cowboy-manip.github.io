@@ -48,6 +48,7 @@ const contextualVideos = Array.from(document.querySelectorAll("[data-contextual-
 let expandedVideo = null;
 let expandedSourceState = null;
 let showcasePage = 0;
+let standaloneVideoRefreshQueued = false;
 
 if (playHint) {
   playHint.textContent = SUPPORTS_HOVER ? "Hover to play video" : "Tap to play video";
@@ -351,6 +352,15 @@ function loadShowcaseVideo(video, videoUrl) {
   playVideo(video);
 }
 
+function refreshShowcaseVideo(video) {
+  const card = video.closest(".showcase-card");
+  if (card && isCardInViewport(card)) {
+    loadShowcaseVideo(video, video.dataset.src || "");
+  } else {
+    unloadStandaloneVideo(video);
+  }
+}
+
 const showcaseVideoObserver = "IntersectionObserver" in window
   ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -462,6 +472,34 @@ function loadContextualVideo(video) {
 
 function unloadContextualVideo(video) {
   unloadStandaloneVideo(video);
+}
+
+function refreshContextualVideo(video) {
+  if (isCardInViewport(video)) {
+    loadContextualVideo(video);
+  } else {
+    unloadContextualVideo(video);
+  }
+}
+
+function refreshStandaloneVideos() {
+  if (showcaseGrid) {
+    showcaseGrid.querySelectorAll("video").forEach(refreshShowcaseVideo);
+  }
+
+  contextualVideos.forEach(refreshContextualVideo);
+}
+
+function scheduleStandaloneVideoRefresh() {
+  if (standaloneVideoRefreshQueued) {
+    return;
+  }
+
+  standaloneVideoRefreshQueued = true;
+  window.requestAnimationFrame(() => {
+    standaloneVideoRefreshQueued = false;
+    refreshStandaloneVideos();
+  });
 }
 
 const contextualVideoObserver = "IntersectionObserver" in window
@@ -724,6 +762,8 @@ document.addEventListener("visibilitychange", () => {
     unloadShowcaseVideos();
     contextualVideos.forEach(unloadContextualVideo);
     sceneStates.forEach(stopStateVideo);
+  } else {
+    scheduleStandaloneVideoRefresh();
   }
 });
 window.addEventListener("keydown", (event) => {
@@ -731,6 +771,9 @@ window.addEventListener("keydown", (event) => {
     closeExpandedVideo();
   }
 });
+window.addEventListener("scroll", scheduleStandaloneVideoRefresh, { passive: true });
+window.addEventListener("resize", scheduleStandaloneVideoRefresh);
+window.addEventListener("pageshow", scheduleStandaloneVideoRefresh);
 window.addEventListener("pagehide", () => {
   closeExpandedVideo();
   unloadShowcaseVideos();
