@@ -80,7 +80,7 @@
 
     <section class="contextual" id="contextual-whole-body" aria-labelledby="contextual-title">
       <div class="contextual__inner">
-        <h2 class="contextual__title" id="contextual-title"><span class="title-accent">COWBOY</span> enables contextual whole-body manipulation</h2>
+        <h2 class="contextual__title" id="contextual-title"><span class="title-accent">COWBOY</span> enables <strong>contextual</strong> manipulation.</h2>
         <div class="contextual__body">
           <div class="contextual__copy">
             <p>Observing only the <span class="text-accent">scene geometry</span>, <span class="text-accent">object geometry</span>, and <span class="text-accent">target object</span>, the policy automatically adapts its behavior accordingly:</p>
@@ -109,6 +109,24 @@
               <p class="contextual-comparison__caption">Same Object, Different Scenes → Different Grasps</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="whole-body" id="whole-body-coordination" aria-labelledby="whole-body-title">
+      <div class="whole-body__inner">
+        <h2 class="whole-body__title" id="whole-body-title"><span class="title-accent">COWBOY</span> coordinates the <strong>whole body.</strong></h2>
+        <div class="whole-body__grid">
+          <figure class="whole-body-demo">
+            <h3 class="whole-body-demo__title">Active Vision</h3>
+            <video class="whole-body-demo__video" muted loop playsinline preload="none" poster="assets/videos/others/posters/active_vision.webp" data-src="assets/videos/others/active_vision.mp4" data-contextual-video aria-label="Active Vision demonstration video"></video>
+            <figcaption class="whole-body-demo__caption">COWBOY policy controls an actuated neck to maintain gaze on the target object</figcaption>
+          </figure>
+          <figure class="whole-body-demo">
+            <h3 class="whole-body-demo__title">Base Motion</h3>
+            <video class="whole-body-demo__video" muted loop playsinline preload="none" poster="assets/videos/others/posters/base_movement.webp" data-src="assets/videos/others/base_movement.mp4" data-contextual-video aria-label="Base Motion demonstration video"></video>
+            <figcaption class="whole-body-demo__caption">COWBOY policy coordinates base movement if the object is out of reach</figcaption>
+          </figure>
         </div>
       </div>
     </section>
