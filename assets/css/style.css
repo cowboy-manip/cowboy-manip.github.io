@@ -708,6 +708,84 @@ h1 {
   cursor: pointer;
 }
 
+.framework {
+  padding: 3.8rem 18px 4.3rem;
+  background: var(--bg);
+}
+
+.framework__inner {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.framework__title {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.65rem, 2.8vw, 2.55rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.framework-component {
+  margin-top: 2.35rem;
+}
+
+.framework-component--pending {
+  margin-top: 2.8rem;
+}
+
+.framework-component__title {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.35rem, 2vw, 1.78rem);
+  font-weight: 720;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.framework-video-grid {
+  display: grid;
+  gap: clamp(0.88rem, 1.8vw, 1.2rem);
+  margin-top: 1.2rem;
+}
+
+.framework-video-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.framework-video-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.framework-video-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.framework-video-card__title {
+  margin: 0 0 0.58rem;
+  color: var(--text);
+  font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+  font-weight: 760;
+  line-height: 1.28;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.framework-video-card__placeholder {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  place-items: center;
+  border: 1px dashed #cfd3d8;
+  border-radius: 8px;
+  background: #f3f4f1;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 1.05vw, 0.98rem);
+  font-weight: 650;
+}
+
 .eval-expand-button,
 .eval-lightbox__close {
   display: inline-grid;
@@ -1000,6 +1078,10 @@ h1 {
   .whole-body__grid {
     grid-template-columns: 1fr;
   }
+
+  .framework-video-grid--three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 720px) {
@@ -1082,6 +1164,19 @@ h1 {
     font-size: clamp(1.45rem, 6vw, 2.05rem);
   }
 
+  .framework {
+    padding: 3rem 18px 3.4rem;
+  }
+
+  .framework__title {
+    font-size: clamp(1.45rem, 6vw, 2.05rem);
+  }
+
+  .framework-video-grid--two,
+  .framework-video-grid--three {
+    grid-template-columns: 1fr;
+  }
+
   .whole-body__grid {
     margin-top: 1.45rem;
   }
@@ -1135,6 +1230,11 @@ h1 {
   }
 
   .whole-body {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .framework {
     padding-right: 14px;
     padding-left: 14px;
   }
