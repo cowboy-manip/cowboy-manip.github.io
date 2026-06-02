@@ -808,6 +808,16 @@ h1 {
   object-fit: cover;
 }
 
+.framework-component__figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f3f4f1;
+}
+
 .eval-expand-button,
 .eval-lightbox__close {
   display: inline-grid;
