@@ -587,27 +587,30 @@ h1 {
 
 .evals-header {
   width: min(1180px, 100%);
-  margin: 0 auto 1.35rem;
-  text-align: center;
+  margin: 0 auto 1.55rem;
+  text-align: left;
 }
 
 .evals-header h2 {
   margin: 0;
   color: var(--text);
-  font-size: clamp(1.75rem, 2.7vw, 2.35rem);
+  font-size: clamp(1.65rem, 2.8vw, 2.55rem);
   line-height: 1.12;
   letter-spacing: 0;
-  font-weight: 850;
+  font-weight: 600;
+}
+
+.evals-header__meta {
+  margin-top: 0.72rem;
 }
 
 .evals-subtitle {
-  max-width: 680px;
-  margin: 0.72rem auto 0;
+  max-width: 1180px;
+  margin: 0;
   color: var(--muted);
-  font-size: clamp(0.98rem, 1.25vw, 1.12rem);
-  font-weight: 600;
-  line-height: 1.55;
-  text-wrap: balance;
+  font-size: clamp(1.08rem, 1.45vw, 1.24rem);
+  font-weight: 560;
+  line-height: 1.42;
 }
 
 .text-accent {
@@ -619,11 +622,12 @@ h1 {
 }
 
 .eval-play-hint {
-  margin: 0.85rem auto 0;
+  margin: 0.86rem auto 0;
   color: var(--accent);
-  font-size: 0.92rem;
-  font-weight: 850;
+  font-size: clamp(0.92rem, 1vw, 0.98rem);
+  font-weight: 780;
   line-height: 1.2;
+  text-align: center;
 }
 
 .eval-grid {
@@ -1040,6 +1044,10 @@ h1 {
     font-size: clamp(1.45rem, 6vw, 2.05rem);
   }
 
+  .evals-header h2 {
+    font-size: clamp(1.45rem, 6vw, 2.05rem);
+  }
+
   .whole-body__grid {
     margin-top: 1.45rem;
   }
@@ -1051,6 +1059,15 @@ h1 {
 
   .eval-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .evals-header__meta {
+    display: block;
+  }
+
+  .eval-play-hint {
+    margin-top: 0.72rem;
+    text-align: center;
   }
 }
 
