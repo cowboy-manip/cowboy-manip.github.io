@@ -183,6 +183,8 @@ h1 {
   color: var(--text);
   font-size: clamp(1rem, 1.3vw, 1.12rem);
   line-height: 1.72;
+  text-align: justify;
+  text-align-last: left;
 }
 
 .abstract p + p {
@@ -818,6 +820,12 @@ h1 {
   background: #f3f4f1;
 }
 
+.framework-component__figure--narrow {
+  width: min(80%, 940px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .distillation-carousel {
   margin-top: 1.35rem;
 }
@@ -1293,6 +1301,10 @@ h1 {
   .framework-video-grid--two,
   .framework-video-grid--three {
     grid-template-columns: 1fr;
+  }
+
+  .framework-component__figure--narrow {
+    width: 100%;
   }
 
   .distillation-grid {
