@@ -72,6 +72,8 @@ const distillationStatus = document.querySelector("[data-distillation-status]");
 const contextualVideos = Array.from(document.querySelectorAll("[data-contextual-video]"));
 let expandedVideo = null;
 let expandedSourceState = null;
+let standaloneExpandedVideo = null;
+let standaloneExpandedSourceVideo = null;
 let showcasePage = 0;
 let distillationPage = 0;
 let standaloneVideoRefreshQueued = false;
@@ -570,10 +572,27 @@ function renderDistillationPage() {
     video.setAttribute("aria-label", `Distillation demonstration video ${distillationPage * DISTILLATION_PAGE_SIZE + index + 1}`);
     keepVideoMuted(video);
 
+    const expandButton = document.createElement("button");
+    expandButton.className = "distillation-expand-button";
+    expandButton.type = "button";
+    expandButton.setAttribute("aria-label", `Expand distillation demonstration video ${distillationPage * DISTILLATION_PAGE_SIZE + index + 1}`);
+    expandButton.append(makeIconSvg("expand"));
+    expandButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openStandaloneExpandedVideo(
+        video,
+        videoUrl,
+        getPosterUrl(videoUrl),
+        "Expanded distillation video"
+      );
+    });
+
+    card.tabIndex = 0;
     card.addEventListener("pointerenter", () => loadDistillationVideo(video));
     card.addEventListener("focusin", () => loadDistillationVideo(video));
 
-    card.append(video);
+    card.append(video, expandButton);
     distillationGrid.append(card);
 
     if (distillationVideoObserver) {
@@ -750,6 +769,48 @@ function createExpandedVideo() {
   expandedVideo = { dialog, video, changeButton, closeButton };
 }
 
+function createStandaloneExpandedVideo() {
+  const dialog = document.createElement("div");
+  dialog.className = "eval-lightbox standalone-lightbox";
+  dialog.hidden = true;
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.setAttribute("aria-label", "Expanded video");
+
+  const frame = document.createElement("div");
+  frame.className = "eval-lightbox__frame";
+
+  const video = document.createElement("video");
+  video.className = "eval-lightbox__video";
+  video.loop = true;
+  video.controls = true;
+  video.playsInline = true;
+  video.preload = "none";
+  keepVideoMuted(video);
+
+  const closeButton = document.createElement("button");
+  closeButton.className = "eval-lightbox__close";
+  closeButton.type = "button";
+  closeButton.setAttribute("aria-label", "Shrink video");
+  closeButton.append(makeIconSvg("shrink"));
+
+  video.addEventListener("loadeddata", () => dialog.classList.remove("is-loading"));
+  video.addEventListener("canplay", () => dialog.classList.remove("is-loading"));
+  video.addEventListener("error", () => dialog.classList.remove("is-loading"));
+  closeButton.addEventListener("click", () => closeStandaloneExpandedVideo());
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) {
+      closeStandaloneExpandedVideo();
+    }
+  });
+
+  frame.append(video, closeButton);
+  dialog.append(frame);
+  document.body.append(dialog);
+
+  standaloneExpandedVideo = { dialog, video, closeButton };
+}
+
 function updateExpandedChangeButton(state) {
   if (!expandedVideo) {
     return;
@@ -793,6 +854,8 @@ function openExpandedVideo(state) {
     return;
   }
 
+  closeStandaloneExpandedVideo(false);
+
   if (!expandedVideo) {
     createExpandedVideo();
   }
@@ -804,6 +867,35 @@ function openExpandedVideo(state) {
   document.body.classList.add("has-eval-lightbox");
   loadExpandedStateVideo(state);
   expandedVideo.closeButton.focus({ preventScroll: true });
+}
+
+function openStandaloneExpandedVideo(sourceVideo, videoUrl, posterUrl, label) {
+  if (!videoUrl) {
+    return;
+  }
+
+  closeExpandedVideo();
+
+  if (!standaloneExpandedVideo) {
+    createStandaloneExpandedVideo();
+  }
+
+  standaloneExpandedSourceVideo = sourceVideo || null;
+  if (sourceVideo) {
+    unloadStandaloneVideo(sourceVideo);
+  }
+
+  standaloneExpandedVideo.dialog.setAttribute("aria-label", label || "Expanded video");
+  standaloneExpandedVideo.dialog.classList.add("is-loading");
+  standaloneExpandedVideo.dialog.hidden = false;
+  standaloneExpandedVideo.video.pause();
+  standaloneExpandedVideo.video.removeAttribute("src");
+  standaloneExpandedVideo.video.poster = posterUrl || getPosterUrl(videoUrl);
+  standaloneExpandedVideo.video.src = videoUrl;
+  standaloneExpandedVideo.video.load();
+  document.body.classList.add("has-eval-lightbox");
+  playVideo(standaloneExpandedVideo.video);
+  standaloneExpandedVideo.closeButton.focus({ preventScroll: true });
 }
 
 function closeExpandedVideo() {
@@ -823,6 +915,30 @@ function closeExpandedVideo() {
   }
 
   expandedSourceState = null;
+}
+
+function closeStandaloneExpandedVideo(shouldRefresh = true) {
+  if (!standaloneExpandedVideo || standaloneExpandedVideo.dialog.hidden) {
+    return;
+  }
+
+  standaloneExpandedVideo.video.pause();
+  standaloneExpandedVideo.video.removeAttribute("src");
+  standaloneExpandedVideo.video.load();
+  standaloneExpandedVideo.dialog.hidden = true;
+  document.body.classList.remove("has-eval-lightbox");
+
+  if (standaloneExpandedSourceVideo) {
+    const card = standaloneExpandedSourceVideo.closest(".distillation-card");
+    if (card && document.contains(card)) {
+      card.focus({ preventScroll: true });
+    }
+  }
+
+  standaloneExpandedSourceVideo = null;
+  if (shouldRefresh && !document.hidden) {
+    scheduleStandaloneVideoRefresh();
+  }
 }
 
 function addExpandButton(state) {
@@ -924,6 +1040,7 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     closeExpandedVideo();
+    closeStandaloneExpandedVideo(false);
     unloadShowcaseVideos();
     unloadDistillationVideos();
     contextualVideos.forEach(unloadContextualVideo);
@@ -935,6 +1052,7 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeExpandedVideo();
+    closeStandaloneExpandedVideo();
   }
 });
 window.addEventListener("scroll", scheduleStandaloneVideoRefresh, { passive: true });
@@ -942,6 +1060,7 @@ window.addEventListener("resize", scheduleStandaloneVideoRefresh);
 window.addEventListener("pageshow", scheduleStandaloneVideoRefresh);
 window.addEventListener("pagehide", () => {
   closeExpandedVideo();
+  closeStandaloneExpandedVideo(false);
   unloadShowcaseVideos();
   unloadDistillationVideos();
   contextualVideos.forEach(unloadContextualVideo);

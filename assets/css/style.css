@@ -829,6 +829,7 @@ h1 {
 }
 
 .distillation-card {
+  position: relative;
   min-width: 0;
   margin: 0;
   overflow: hidden;
@@ -891,6 +892,7 @@ h1 {
 }
 
 .eval-expand-button,
+.distillation-expand-button,
 .eval-lightbox__close {
   display: inline-grid;
   place-items: center;
@@ -909,6 +911,7 @@ h1 {
 }
 
 .eval-expand-button svg,
+.distillation-expand-button svg,
 .eval-lightbox__close svg {
   width: 1.05rem;
   height: 1.05rem;
@@ -919,7 +922,8 @@ h1 {
   stroke-linejoin: round;
 }
 
-.eval-expand-button {
+.eval-expand-button,
+.distillation-expand-button {
   position: absolute;
   top: 0.55rem;
   right: 0.55rem;
@@ -933,6 +937,8 @@ h1 {
 
 .eval-expand-button:hover,
 .eval-expand-button:focus-visible,
+.distillation-expand-button:hover,
+.distillation-expand-button:focus-visible,
 .eval-lightbox__close:hover,
 .eval-lightbox__close:focus-visible {
   border-color: var(--accent);
@@ -941,7 +947,9 @@ h1 {
 }
 
 .eval-card.has-video:hover .eval-expand-button,
-.eval-card.has-video:focus-within .eval-expand-button {
+.eval-card.has-video:focus-within .eval-expand-button,
+.distillation-card:hover .distillation-expand-button,
+.distillation-card:focus-within .distillation-expand-button {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -1159,6 +1167,12 @@ h1 {
   .eval-expand-button,
   .eval-change-button {
     display: none;
+  }
+
+  .distillation-expand-button {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 }
 
