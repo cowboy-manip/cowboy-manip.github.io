@@ -786,6 +786,16 @@ h1 {
   font-weight: 650;
 }
 
+.framework-video-card__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f3f4f1;
+  object-fit: cover;
+}
+
 .eval-expand-button,
 .eval-lightbox__close {
   display: inline-grid;
