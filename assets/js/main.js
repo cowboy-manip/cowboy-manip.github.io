@@ -44,6 +44,7 @@ const playingStates = [];
 const showcaseGrid = document.querySelector("[data-showcase-grid]");
 const showcaseButtons = Array.from(document.querySelectorAll("[data-showcase-step]"));
 const showcaseStatus = document.querySelector("[data-showcase-status]");
+const contextualVideos = Array.from(document.querySelectorAll("[data-contextual-video]"));
 let expandedVideo = null;
 let expandedSourceState = null;
 let showcasePage = 0;
@@ -358,6 +359,47 @@ showcaseButtons.forEach((button) => {
   });
 });
 
+function loadContextualVideo(video) {
+  const videoUrl = video.getAttribute("data-src");
+  if (!videoUrl) {
+    return;
+  }
+
+  if (!video.getAttribute("src")) {
+    video.src = videoUrl;
+    video.load();
+  }
+
+  playVideo(video);
+}
+
+function pauseContextualVideo(video) {
+  video.pause();
+}
+
+const contextualVideoObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        loadContextualVideo(video);
+      } else {
+        pauseContextualVideo(video);
+      }
+    });
+  }, { rootMargin: "160px 0px", threshold: 0.15 })
+  : null;
+
+contextualVideos.forEach((video) => {
+  keepVideoMuted(video);
+
+  if (contextualVideoObserver) {
+    contextualVideoObserver.observe(video);
+  } else {
+    loadContextualVideo(video);
+  }
+});
+
 const visibilityObserver = "IntersectionObserver" in window
   ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -590,6 +632,7 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     closeExpandedVideo();
+    contextualVideos.forEach(pauseContextualVideo);
     sceneStates.forEach(stopStateVideo);
   }
 });
@@ -601,6 +644,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("pagehide", () => {
   closeExpandedVideo();
   unloadShowcaseVideos();
+  contextualVideos.forEach(pauseContextualVideo);
   sceneStates.forEach(stopStateVideo);
 });
 

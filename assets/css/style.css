@@ -235,15 +235,15 @@ h1 {
 .sim-real__summary {
   margin: 0;
   color: var(--text);
-  font-size: clamp(1rem, 1.3vw, 1.12rem);
-  font-weight: 700;
+  font-size: clamp(1.08rem, 1.45vw, 1.24rem);
+  font-weight: 560;
   line-height: 1.55;
 }
 
 .sim-real__summary {
   margin-top: 1.15rem;
   color: var(--muted);
-  font-weight: 650;
+  font-weight: 560;
 }
 
 .dof-list {
@@ -263,15 +263,16 @@ h1 {
   padding: 0.72rem 0;
   border-bottom: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: clamp(1.02rem, 1.18vw, 1.12rem);
+  font-weight: 560;
   line-height: 1.25;
 }
 
 .dof-list strong {
   flex: 0 0 auto;
   color: var(--text);
-  font-size: 0.92rem;
-  font-weight: 900;
+  font-size: clamp(0.98rem, 1.1vw, 1.05rem);
+  font-weight: 560;
 }
 
 .showcase-carousel {
@@ -351,10 +352,8 @@ h1 {
 }
 
 .contextual {
-  padding: 3.6rem 18px 3.7rem;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
+  padding: 3.8rem 18px 4rem;
+  background: var(--bg);
 }
 
 .contextual__inner {
@@ -364,27 +363,130 @@ h1 {
 
 .contextual__title {
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   color: var(--text);
-  font-size: clamp(1.65rem, 2.7vw, 2.45rem);
-  line-height: 1.14;
+  font-size: clamp(1.65rem, 2.8vw, 2.55rem);
+  line-height: 1.12;
   letter-spacing: 0;
-  font-weight: 650;
-  text-align: center;
+  font-weight: 600;
+  text-align: left;
 }
 
 .contextual__body {
-  max-width: 980px;
-  margin: 1.25rem auto 0;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(420px, 1.18fr);
+  gap: clamp(1.35rem, 3vw, 3.2rem);
+  align-items: center;
+  margin: 2rem auto 0;
   color: var(--text);
-  font-size: clamp(1rem, 1.25vw, 1.12rem);
-  font-weight: 650;
-  line-height: 1.62;
+  text-align: left;
+}
+
+.contextual__copy {
+  max-width: 430px;
+  font-size: clamp(1.08rem, 1.45vw, 1.24rem);
+  font-weight: 560;
+  line-height: 1.55;
+}
+
+.contextual__copy p {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.08rem, 1.45vw, 1.24rem);
+  font-weight: 560;
+  line-height: 1.55;
+}
+
+.contextual__copy p + p {
+  margin-top: 1rem;
+}
+
+.contextual__copy p:last-child {
+  margin-top: 1.15rem;
+  color: var(--muted);
+  font-weight: 560;
+}
+
+.contextual__copy ul {
+  display: grid;
+  gap: 0;
+  margin: 1.05rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.contextual__copy li {
+  position: relative;
+  margin: 0;
+  padding: 0.72rem 0 0.72rem 1.05rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: clamp(1.02rem, 1.18vw, 1.12rem);
+  font-weight: 560;
+  line-height: 1.35;
+}
+
+.contextual__copy li::before {
+  position: absolute;
+  top: 1.16rem;
+  left: 0;
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 999px;
+  background: var(--accent);
+  content: "";
+}
+
+.contextual__copy li::marker {
+  color: var(--accent);
+}
+
+.contextual__visuals {
+  display: grid;
+  min-width: 0;
+  gap: 1.12rem;
+}
+
+.contextual-comparison {
+  display: grid;
+  gap: 0.58rem;
+}
+
+.contextual-comparison__title {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.08rem, 1.45vw, 1.24rem);
+  font-weight: 780;
+  line-height: 1.28;
+  letter-spacing: 0;
   text-align: center;
 }
 
-.contextual__body p {
+.contextual-comparison__caption {
   margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.86rem, 1vw, 0.95rem);
+  font-weight: 720;
+  line-height: 1.28;
+  text-align: center;
+}
+
+.contextual-video-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+.contextual-demo-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f3f4f1;
+  box-shadow: none;
+  object-fit: cover;
 }
 
 .evals {
@@ -757,6 +859,14 @@ h1 {
   .sim-real__copy {
     max-width: 680px;
   }
+
+  .contextual__body {
+    grid-template-columns: 1fr;
+  }
+
+  .contextual__copy {
+    max-width: 720px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -806,6 +916,18 @@ h1 {
     margin-top: 1.45rem;
   }
 
+  .contextual {
+    padding: 3rem 18px 3.2rem;
+  }
+
+  .contextual__title {
+    font-size: clamp(1.45rem, 6vw, 2.05rem);
+  }
+
+  .contextual__body {
+    margin-top: 1.35rem;
+  }
+
   .showcase-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.62rem;
@@ -833,6 +955,19 @@ h1 {
   .sim-real {
     padding-right: 14px;
     padding-left: 14px;
+  }
+
+  .contextual {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .contextual-video-pair {
+    gap: 0.44rem;
+  }
+
+  .contextual-comparison__title {
+    font-size: 0.92rem;
   }
 
   .dof-list li {
