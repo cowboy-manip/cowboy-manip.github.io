@@ -818,6 +818,78 @@ h1 {
   background: #f3f4f1;
 }
 
+.distillation-carousel {
+  margin-top: 1.35rem;
+}
+
+.distillation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.74rem, 1.45vw, 1rem);
+}
+
+.distillation-card {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.distillation-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #f3f4f1;
+  object-fit: cover;
+}
+
+.distillation-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.62rem;
+  margin-top: 0.95rem;
+}
+
+.distillation-button {
+  display: inline-flex;
+  width: 2.35rem;
+  height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(20, 25, 35, 0.08);
+}
+
+.distillation-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.distillation-button:disabled {
+  color: rgba(22, 22, 22, 0.48);
+  cursor: default;
+}
+
+.distillation-status {
+  min-width: 3.6rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1;
+  text-align: center;
+}
+
 .eval-expand-button,
 .eval-lightbox__close {
   display: inline-grid;
@@ -1209,6 +1281,10 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .distillation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .whole-body__grid {
     margin-top: 1.45rem;
   }
@@ -1291,5 +1367,9 @@ h1 {
 
   .eval-caption {
     font-size: 0.78rem;
+  }
+
+  .distillation-grid {
+    gap: 0.5rem;
   }
 }

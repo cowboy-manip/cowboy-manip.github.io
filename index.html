@@ -346,15 +346,15 @@
           <div class="framework-video-grid framework-video-grid--three">
             <figure class="framework-video-card">
               <h4 class="framework-video-card__title">Top Down Grasp</h4>
-              <div class="framework-video-card__placeholder" aria-label="Top Down Grasp video placeholder">Video placeholder</div>
+              <video class="framework-video-card__video" muted loop playsinline preload="none" poster="assets/videos/local/posters/top_down_grasp.webp" data-src="assets/videos/local/top_down_grasp.mp4" data-contextual-video aria-label="Top Down Grasp demonstration video"></video>
             </figure>
             <figure class="framework-video-card">
               <h4 class="framework-video-card__title">Side Grasp</h4>
-              <div class="framework-video-card__placeholder" aria-label="Side Grasp video placeholder">Video placeholder</div>
+              <video class="framework-video-card__video" muted loop playsinline preload="none" poster="assets/videos/local/posters/side_grasp.webp" data-src="assets/videos/local/side_grasp.mp4" data-contextual-video aria-label="Side Grasp demonstration video"></video>
             </figure>
             <figure class="framework-video-card">
               <h4 class="framework-video-card__title">Constrained Side Grasp</h4>
-              <div class="framework-video-card__placeholder" aria-label="Constrained Side Grasp video placeholder">Video placeholder</div>
+              <video class="framework-video-card__video" muted loop playsinline preload="none" poster="assets/videos/local/posters/constrained_side_grasp.webp" data-src="assets/videos/local/constrained_side_grasp.mp4" data-contextual-video aria-label="Constrained Side Grasp demonstration video"></video>
             </figure>
           </div>
         </div>
@@ -363,6 +363,14 @@
           <h3 class="framework-component__title">3. Local-to-Full-Scenes Multi-Teacher Distillation</h3>
           <p class="framework-component__description">We embed the local scenes within diverse full scenes, where the WBC first brings the end effector near the object. The local policy can then complete the task, enabling a policy trained in one local scene to generate expert motion across diverse full-scenes.</p>
           <img class="framework-component__figure" src="assets/videos/distillation/local_global_scene_figure.jpg" alt="Local scenes embedded within diverse full scenes for multi-teacher distillation">
+          <div class="distillation-carousel" aria-label="Distillation video carousel">
+            <div class="distillation-grid" data-distillation-grid></div>
+            <div class="distillation-controls">
+              <button class="distillation-button" type="button" data-distillation-step="-1" aria-label="Previous distillation video group"><span aria-hidden="true">&lt;</span></button>
+              <span class="distillation-status" data-distillation-status></span>
+              <button class="distillation-button" type="button" data-distillation-step="1" aria-label="Next distillation video group"><span aria-hidden="true">&gt;</span></button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
