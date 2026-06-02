@@ -34,7 +34,7 @@ if (menuButton && menuPanel) {
 }
 
 const REAL_WORLD_VIDEO_ROOT = "assets/videos/real_world_evals";
-const MAX_PLAYING_EVAL_VIDEOS = 6;
+const MAX_PLAYING_EVAL_VIDEOS = 4;
 const SHOWCASE_PAGE_SIZE = 4;
 const SUPPORTS_HOVER = window.matchMedia ? window.matchMedia("(hover: hover)").matches : true;
 const playHint = document.querySelector("[data-play-hint]");
@@ -322,11 +322,47 @@ function unloadShowcaseVideos() {
   }
 
   showcaseGrid.querySelectorAll("video").forEach((video) => {
-    video.pause();
-    video.removeAttribute("src");
-    video.load();
+    if (showcaseVideoObserver) {
+      showcaseVideoObserver.unobserve(video);
+    }
+
+    unloadStandaloneVideo(video);
   });
 }
+
+function unloadStandaloneVideo(video) {
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+}
+
+function loadShowcaseVideo(video, videoUrl) {
+  const card = video.closest(".showcase-card");
+  if (card && !isCardInViewport(card)) {
+    unloadStandaloneVideo(video);
+    return;
+  }
+
+  if (!video.getAttribute("src")) {
+    video.src = videoUrl;
+    video.load();
+  }
+
+  playVideo(video);
+}
+
+const showcaseVideoObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        loadShowcaseVideo(video, video.dataset.src || "");
+      } else {
+        unloadStandaloneVideo(video);
+      }
+    });
+  }, { threshold: 0.08 })
+  : null;
 
 function updateShowcaseControls(totalPages) {
   showcaseButtons.forEach((button) => {
@@ -372,15 +408,21 @@ function renderShowcasePage() {
     video.playsInline = true;
     video.preload = "none";
     video.poster = getPosterUrl(videoUrl);
-    video.src = videoUrl;
+    video.dataset.src = videoUrl;
     keepVideoMuted(video);
+
+    card.addEventListener("pointerenter", () => loadShowcaseVideo(video, videoUrl));
+    card.addEventListener("focusin", () => loadShowcaseVideo(video, videoUrl));
 
     media.append(video);
     card.append(media);
     showcaseGrid.append(card);
 
-    video.load();
-    playVideo(video);
+    if (showcaseVideoObserver) {
+      showcaseVideoObserver.observe(video);
+    } else {
+      loadShowcaseVideo(video, videoUrl);
+    }
   });
 
   updateShowcaseControls(totalPages);
@@ -405,6 +447,11 @@ function loadContextualVideo(video) {
     return;
   }
 
+  if (!isCardInViewport(video)) {
+    unloadContextualVideo(video);
+    return;
+  }
+
   if (!video.getAttribute("src")) {
     video.src = videoUrl;
     video.load();
@@ -413,8 +460,8 @@ function loadContextualVideo(video) {
   playVideo(video);
 }
 
-function pauseContextualVideo(video) {
-  video.pause();
+function unloadContextualVideo(video) {
+  unloadStandaloneVideo(video);
 }
 
 const contextualVideoObserver = "IntersectionObserver" in window
@@ -424,14 +471,16 @@ const contextualVideoObserver = "IntersectionObserver" in window
       if (entry.isIntersecting) {
         loadContextualVideo(video);
       } else {
-        pauseContextualVideo(video);
+        unloadContextualVideo(video);
       }
     });
-  }, { rootMargin: "160px 0px", threshold: 0.15 })
+  }, { threshold: 0.08 })
   : null;
 
 contextualVideos.forEach((video) => {
   keepVideoMuted(video);
+  video.addEventListener("pointerenter", () => loadContextualVideo(video));
+  video.addEventListener("focusin", () => loadContextualVideo(video));
 
   if (contextualVideoObserver) {
     contextualVideoObserver.observe(video);
@@ -672,7 +721,8 @@ Array.from(document.querySelectorAll(".eval-card")).forEach((card) => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     closeExpandedVideo();
-    contextualVideos.forEach(pauseContextualVideo);
+    unloadShowcaseVideos();
+    contextualVideos.forEach(unloadContextualVideo);
     sceneStates.forEach(stopStateVideo);
   }
 });
@@ -684,7 +734,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("pagehide", () => {
   closeExpandedVideo();
   unloadShowcaseVideos();
-  contextualVideos.forEach(pauseContextualVideo);
+  contextualVideos.forEach(unloadContextualVideo);
   sceneStates.forEach(stopStateVideo);
 });
 
