@@ -39,7 +39,9 @@ window.REAL_WORLD_EVAL_VIDEOS = {
     "scene_8_2.mp4"
   ],
   "9": [
-    "scene_9_1.mp4"
+    "scene_9_1.mp4",
+    "scene_9_2.mp4",
+    "scene_9_3.mp4"
   ],
   "10": [
     "scene_10_1.mp4"
@@ -151,10 +153,12 @@ window.REAL_WORLD_EVAL_SHOWCASE_ORDER = [
   "scene_23/scene_23_1.mp4",
   "scene_23/scene_23_2.mp4",
   "scene_23/scene_23_3.mp4",
-  "scene_9/scene_9_1.mp4",
+  "scene_9/scene_9_3.mp4",
   "scene_11/scene_11_1.mp4",
   "scene_11/scene_11_2.mp4",
   "scene_5/scene_5_2.mp4",
   "scene_16/scene_16_1.mp4",
-  "scene_16/scene_16_2.mp4"
+  "scene_16/scene_16_2.mp4",
+  "scene_9/scene_9_1.mp4",
+  "scene_9/scene_9_2.mp4"
 ];
